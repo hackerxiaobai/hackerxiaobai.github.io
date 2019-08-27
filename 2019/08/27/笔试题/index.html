@@ -6,20 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>wordpiece和sentencepiece | Hexo</title>
+  <title>笔试题 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="wordpiece wordpiece的主要实现方式有BPE,BPE的大概训练过程：首先将词分成一个一个的字符，然后在词的范围内统计字符对出现的次数，每次将次数最多的字符对保存起来，直到循环次数结束。">
-<meta name="keywords" content="分词">
+  <meta name="description" content="将list中具有重复子串的str删除，保留最长子串** 如图: **">
 <meta property="og:type" content="article">
-<meta property="og:title" content="wordpiece和sentencepiece">
-<meta property="og:url" content="http://yoursite.com/2019/08/27/wordpiece和sentencepiece/index.html">
+<meta property="og:title" content="笔试题">
+<meta property="og:url" content="http://yoursite.com/2019/08/27/笔试题/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="wordpiece wordpiece的主要实现方式有BPE,BPE的大概训练过程：首先将词分成一个一个的字符，然后在词的范围内统计字符对出现的次数，每次将次数最多的字符对保存起来，直到循环次数结束。">
+<meta property="og:description" content="将list中具有重复子串的str删除，保留最长子串** 如图: **">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-08-27T08:35:27.496Z">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/笔试题/1.png">
+<meta property="og:updated_time" content="2019-08-27T08:37:13.278Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="wordpiece和sentencepiece">
-<meta name="twitter:description" content="wordpiece wordpiece的主要实现方式有BPE,BPE的大概训练过程：首先将词分成一个一个的字符，然后在词的范围内统计字符对出现的次数，每次将次数最多的字符对保存起来，直到循环次数结束。">
+<meta name="twitter:title" content="笔试题">
+<meta name="twitter:description" content="将list中具有重复子串的str删除，保留最长子串** 如图: **">
+<meta name="twitter:image" content="http://yoursite.com/2019/08/27/笔试题/1.png">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -147,33 +148,31 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-wordpiece和sentencepiece" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-笔试题" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      wordpiece和sentencepiece
+      笔试题
     </h1>
   
 
         
-        <a href="/2019/08/27/wordpiece和sentencepiece/" class="archive-article-date">
-  	<time datetime="2019-08-27T08:07:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-27</time>
+        <a href="/2019/08/27/笔试题/" class="archive-article-date">
+  	<time datetime="2019-08-27T08:28:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-27</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="wordpiece"><a href="#wordpiece" class="headerlink" title="wordpiece"></a>wordpiece</h3><ol>
-<li>wordpiece的主要实现方式有BPE,BPE的大概训练过程：首先将词分成一个一个的字符，然后在词的范围内统计字符对出现的次数，每次将次数最多的字符对保存起来，直到循环次数结束。<a id="more"></a>
-<h3 id="sentencepiece"><a href="#sentencepiece" class="headerlink" title="sentencepiece"></a>sentencepiece</h3></li>
-<li>原理是重复出现次数多的片断，就认为是一个意群（词）<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># 安装</span><br><span class="line">sudo pip install SentencePiece</span><br><span class="line"></span><br><span class="line"># 命令行训练</span><br><span class="line">spm_train --input=/tmp/a.txt --model_prefix=/tmp/test</span><br><span class="line"># --input指定需要训练的文本文件，--model_prefix指定训练好的模型名，本例中生成/tmp/test.model </span><br><span class="line"># 和/tmp/test.vocab两个文件，vocab是词典信息。</span><br><span class="line"></span><br><span class="line"># 命令行调用</span><br><span class="line">echo &quot;食材上不会有这样的纠结&quot; | spm_encode --model=/tmp/test.model</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># python调用</span><br><span class="line">import sentencepiece as spm</span><br><span class="line">sp = spm.SentencePieceProcessor()</span><br><span class="line">text = &quot;食材上不会有这样的纠结&quot; </span><br><span class="line">sp.Load(&quot;/tmp/test.model&quot;) </span><br><span class="line">print(sp.EncodeAsPieces(text))</span><br></pre></td></tr></table></figure>
+        <h3 id="将list中具有重复子串的str删除，保留最长子串"><a href="#将list中具有重复子串的str删除，保留最长子串" class="headerlink" title="将list中具有重复子串的str删除，保留最长子串"></a>将list中具有重复子串的str删除，保留最长子串</h3><p>** 如图: **</p>
+<img src="/2019/08/27/笔试题/1.png" title="笔试说明">
+<a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"># 本人采用了最简单的两次for循环暴力解决，</span><br><span class="line"># 有人会说trie就可以搞定啊，但是似乎不能搞定哟</span><br><span class="line"># 第二个原因是尽量用原生的简单方法搞定它</span><br><span class="line"></span><br><span class="line"># 有什么好的方法，欢迎留言哟</span><br><span class="line"></span><br><span class="line"># 去重且将排序，倒序           </span><br><span class="line">tmp = list(set(tmp))</span><br><span class="line">tmp.sort(key=lambda x: len(x),reverse=True)</span><br><span class="line"># 搜出子串 </span><br><span class="line">sub_str = []</span><br><span class="line">for i in range(len(tmp)-1):</span><br><span class="line">    for j in range(i+1,len(tmp)):</span><br><span class="line">        if tmp[j] in tmp[i]:</span><br><span class="line">            sub_str.append(tmp[j])</span><br><span class="line">        </span><br><span class="line"># 得到最终的最长字符串 </span><br><span class="line">final_tmp = []</span><br><span class="line">for i in tmp:</span><br><span class="line">    # 得到不在子串中且不是单个字符的数据</span><br><span class="line">    if i not in sub_str and len(i)&gt;=2:</span><br><span class="line">        final_tmp.append(i)</span><br></pre></td></tr></table></figure>
 
-</li>
-</ol>
 
       
 
@@ -203,17 +202,6 @@
     <div class="article-info article-info-index">
       
       
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">分词</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
       
 
       
@@ -264,7 +252,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/08/27/wordpiece和sentencepiece/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/08/27/笔试题/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -278,15 +266,11 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/08/27/hello-world/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Hello World
-        
-      </div>
-    </a>
   
+    <a href="/2019/08/27/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Hello World</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 
