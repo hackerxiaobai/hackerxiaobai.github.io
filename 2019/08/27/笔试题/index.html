@@ -16,10 +16,12 @@
 <meta property="og:site_name" content="王磊的博客">
 <meta property="og:description" content="将list中具有重复子串的str删除，保留最长子串** 如图: **">
 <meta property="og:locale" content="en">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/笔试题/1.png">
 <meta property="og:updated_time" content="2019-08-27T10:59:02.625Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="笔试题">
 <meta name="twitter:description" content="将list中具有重复子串的str删除，保留最长子串** 如图: **">
+<meta name="twitter:image" content="http://yoursite.com/2019/08/27/笔试题/1.png">
   
     <link rel="alternative" href="/atom.xml" title="王磊的博客" type="application/atom+xml">
   
@@ -170,7 +172,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h3 id="将list中具有重复子串的str删除，保留最长子串"><a href="#将list中具有重复子串的str删除，保留最长子串" class="headerlink" title="将list中具有重复子串的str删除，保留最长子串"></a>将list中具有重复子串的str删除，保留最长子串</h3><p>** 如图: **</p>
-
+<img src="/2019/08/27/笔试题/1.png" title="笔试说明">
 <a id="more"></a>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 本人采用了最简单的两次for循环暴力解决，</span></span><br><span class="line"><span class="comment"># 有人会说trie就可以搞定啊，但是似乎不能搞定哟</span></span><br><span class="line"><span class="comment"># 第二个原因是尽量用原生的简单方法搞定它</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 有什么好的方法，欢迎留言哟</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 去重且将排序，倒序           </span></span><br><span class="line">tmp = list(set(tmp))</span><br><span class="line">tmp.sort(key=<span class="keyword">lambda</span> x: len(x),reverse=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># 搜出子串 </span></span><br><span class="line">sub_str = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(tmp)<span class="number">-1</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(i+<span class="number">1</span>,len(tmp)):</span><br><span class="line">        <span class="keyword">if</span> tmp[j] <span class="keyword">in</span> tmp[i]:</span><br><span class="line">            sub_str.append(tmp[j])</span><br><span class="line">        </span><br><span class="line"><span class="comment"># 得到最终的最长字符串 </span></span><br><span class="line">final_tmp = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> tmp:</span><br><span class="line">    <span class="comment"># 得到不在子串中且不是单个字符的数据</span></span><br><span class="line">    <span class="keyword">if</span> i <span class="keyword">not</span> <span class="keyword">in</span> sub_str <span class="keyword">and</span> len(i)&gt;=<span class="number">2</span>:</span><br><span class="line">        final_tmp.append(i)</span><br></pre></td></tr></table></figure>
 
@@ -427,6 +429,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Wikipieda</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">平行语料</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">分词</a>
               </li>
              
@@ -435,11 +445,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Wikipieda</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">平行语料</a>
+                <a href="javascript:void(0)" class="js-tag color3">细粒度情感分析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -452,10 +458,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NLP加速</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">细粒度情感分析</a>
               </li>
             
             <div class="clearfix"></div>

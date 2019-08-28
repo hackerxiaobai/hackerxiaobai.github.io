@@ -16,10 +16,12 @@
 <meta property="og:site_name" content="王磊的博客">
 <meta property="og:description" content="Cython与Spacy合用加速NLP项目 本次报告主要内容参考这篇博客,重点在spacy与自定义数据结构的分析  主要内容 如何用 Python 设计一个高速模块 如何利用 spaCy 的内部数据结构来有效地设计超高速 NLP 函数。">
 <meta property="og:locale" content="en">
+<meta property="og:image" content="http://yoursite.com/2019/08/28/Cython与Spacy加速NLP项目/spacy.png">
 <meta property="og:updated_time" content="2019-08-28T03:00:39.921Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Cython与Spacy加速NLP项目">
 <meta name="twitter:description" content="Cython与Spacy合用加速NLP项目 本次报告主要内容参考这篇博客,重点在spacy与自定义数据结构的分析  主要内容 如何用 Python 设计一个高速模块 如何利用 spaCy 的内部数据结构来有效地设计超高速 NLP 函数。">
+<meta name="twitter:image" content="http://yoursite.com/2019/08/28/Cython与Spacy加速NLP项目/spacy.png">
   
     <link rel="alternative" href="/atom.xml" title="王磊的博客" type="application/atom+xml">
   
@@ -209,7 +211,7 @@
 <blockquote>
 <p>spaCy 中的所有 unicode 字符串（token 的文本、其小写文本、引理形式、POS 键标签、解析树依赖关系标签、命名实体标签…）都存储在叫 StringStore 的单数据结构中，它们在里面由 64 位散列索引，即 C uint64_t<br>StringStore 对象实现了 Python unicode 字符串和 64 位哈希码之间的查找表。</p>
 </blockquote>
-
+<img src="/2019/08/28/Cython与Spacy加速NLP项目/spacy.png" title="spacy">
 
 <blockquote>
 <p>它可以通过 spaCy 任意处及任意对象访问（请参阅上图），例如 nlp.vocab.strings、doc.vocab.strings 或 span.doc.vocab.string</p>
@@ -515,6 +517,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Wikipieda</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">平行语料</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">分词</a>
               </li>
              
@@ -523,11 +533,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Wikipieda</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">平行语料</a>
+                <a href="javascript:void(0)" class="js-tag color3">细粒度情感分析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -540,10 +546,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NLP加速</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">细粒度情感分析</a>
               </li>
             
             <div class="clearfix"></div>

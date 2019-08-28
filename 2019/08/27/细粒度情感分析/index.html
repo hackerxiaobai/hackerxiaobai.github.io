@@ -16,10 +16,23 @@
 <meta property="og:site_name" content="王磊的博客">
 <meta property="og:description" content="细粒度情感分析资料博客一博客二 Sentiment Analysis 按粒度可分为3种： Document Level Sentence Level Aspect Level">
 <meta property="og:locale" content="en">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/细粒度情感分析/lstm.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/细粒度情感分析/td_lstm.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/细粒度情感分析/atae_lstm.jpg">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/细粒度情感分析/ian.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/细粒度情感分析/memnet.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/细粒度情感分析/ram.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/细粒度情感分析/cabasc.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/细粒度情感分析/tnet.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/细粒度情感分析/aoa.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/细粒度情感分析/mgan.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/细粒度情感分析/bert.png">
+<meta property="og:image" content="http://yoursite.com/2019/08/27/细粒度情感分析/aen.png">
 <meta property="og:updated_time" content="2019-08-27T09:20:51.571Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="细粒度情感分析">
 <meta name="twitter:description" content="细粒度情感分析资料博客一博客二 Sentiment Analysis 按粒度可分为3种： Document Level Sentence Level Aspect Level">
+<meta name="twitter:image" content="http://yoursite.com/2019/08/27/细粒度情感分析/lstm.png">
   
     <link rel="alternative" href="/atom.xml" title="王磊的博客" type="application/atom+xml">
   
@@ -192,7 +205,7 @@
 <p>Aspect-Category：表示一种 Aspect，固定而唯一，如上例中的 Image</p>
 </blockquote>
 <h3 id="以下模型都在公开数据集semeval2014上进行了实验-没有很仔细的调参"><a href="#以下模型都在公开数据集semeval2014上进行了实验-没有很仔细的调参" class="headerlink" title="以下模型都在公开数据集semeval2014上进行了实验(没有很仔细的调参)"></a>以下模型都在公开数据集semeval2014上进行了实验(没有很仔细的调参)</h3><h3 id="历年模型"><a href="#历年模型" class="headerlink" title="历年模型"></a>历年模型</h3><h4 id="LSTM"><a href="#LSTM" class="headerlink" title="LSTM"></a>LSTM</h4><ol>
-<li>最简单的就是Sentence Level，经过enmbedding后接LSTM，最后一层接softmax多分类，模型如下
+<li>最简单的就是Sentence Level，经过enmbedding后接LSTM，最后一层接softmax多分类，模型如下<img src="/2019/08/27/细粒度情感分析/lstm.png" title="lstm">
 
 </li>
 </ol>
@@ -220,7 +233,7 @@
 <ol>
 <li>该方法就是以aspect词为分界点，将一句话分成左侧和右侧两个子句（包含aspect词），分别经过LSTM，最后cat起来，接softmax多分类</li>
 </ol>
-
+<img src="/2019/08/27/细粒度情感分析/td_lstm.png" title="td_lstm">
 
 <table>
 <thead>
@@ -245,7 +258,7 @@
 <ol>
 <li>该方法就是将aspect和sentences分别embedding后在输入端cat起来，然后输入到lstm得到hidden，在将hidden和aspect在做一次cat，输入给attention得到score权重，score和hidden做一次权重计算，接dense层得到分类结果，模型如图：</li>
 </ol>
-
+<img src="/2019/08/27/细粒度情感分析/atae_lstm.jpg" title="atae_lstm">
 
 <table>
 <thead>
@@ -268,7 +281,7 @@
 </tbody></table>
 <h4 id="IAN-交互式注意力网络"><a href="#IAN-交互式注意力网络" class="headerlink" title="IAN 交互式注意力网络"></a>IAN 交互式注意力网络</h4><p><a href="https://arxiv.org/pdf/1709.00893.pdf" target="_blank" rel="noopener">Interactive Attention Networks for Aspect-Level Sentiment Classification</a></p>
 <ol>
-<li>该模型的设计亮点在于sentence和aspect分别embedding后输入到lstm模型，得到的输出在dim=1维度求sum进行pool，然后分别交互做attention，最后cat起来接softmax分类，模型如下
+<li>该模型的设计亮点在于sentence和aspect分别embedding后输入到lstm模型，得到的输出在dim=1维度求sum进行pool，然后分别交互做attention，最后cat起来接softmax分类，模型如下<img src="/2019/08/27/细粒度情感分析/ian.png" title="ian">
 
 </li>
 </ol>
@@ -295,7 +308,7 @@
 <ol>
 <li>该模型将sentence中的aspect去除，分别将去除aspect的sentence和aspect进行embedding，然后多次循环分别计算attention，每次都与aspect进行cat，最后接一层全连接，模型如图：</li>
 </ol>
-
+<img src="/2019/08/27/细粒度情感分析/memnet.png" title="memnet">
 
 <table>
 <thead>
@@ -320,7 +333,7 @@
 <ol>
 <li>该模型是和memnet对比的，很显然的一个想法就是memnet只是embdedding后计算attention，ram就是多加了一层lstm外加一个location位置信息，模型如下：</li>
 </ol>
-
+<img src="/2019/08/27/细粒度情感分析/ram.png" title="ram">
 
 <table>
 <thead>
@@ -345,7 +358,7 @@
 <ol>
 <li>该模型分别将sentence和aspect进行embedding，然后都在dim=1进行sum，求一个location位置信息得到sentence的三维矩阵A = [batchsize，seqlen，embedding]，将A在dim=1进行split分别与sentence和aspect在dim=1做了sum的矩阵cat，接两层dence，最后接softmax得到分类结果。模型如下：</li>
 </ol>
-
+<img src="/2019/08/27/细粒度情感分析/cabasc.png" title="cabasc">
 
 <table>
 <thead>
@@ -370,7 +383,7 @@
 <ol>
 <li>该模型引入了1维卷积，整个模型自下而上也是embedding、lstm、CNN，最后接softmax得到分类结果</li>
 </ol>
-
+<img src="/2019/08/27/细粒度情感分析/tnet.png" title="tnet">
 
 <table>
 <thead>
@@ -395,7 +408,7 @@
 <ol>
 <li>该模型思想也挺简单的，也是分别将sentence和aspect经过embedding和lstm得到三维的矩阵A(batch size,sentenceslen, embedding)和B(batch size, aspectlen,embedding),然后计算一个torch.bmm(A,B.transpose(1,2)) 得到C(batchsize, sentencelen,aspectlen),分别在dim=1，2上计算C的softmax，将求过softmax的两个矩阵进行计算得到gamma矩阵，最后将gamma矩阵和A计算，接最后全连接层得到结果，模型如下：</li>
 </ol>
-
+<img src="/2019/08/27/细粒度情感分析/aoa.png" title="aoa">
 
 <table>
 <thead>
@@ -420,7 +433,7 @@
 <ol>
 <li>该模型整体思路也比较简单，总的来看也是分别sentence和aspect进行embedding和lstm，分别池化，sentence和aspect进行交互，最后将得到的多个层面进行cat接全连接得到结果，模型如下：</li>
 </ol>
-
+<img src="/2019/08/27/细粒度情感分析/mgan.png" title="mgan">
 
 <table>
 <thead>
@@ -445,7 +458,7 @@
 <ol>
 <li>该篇其实就是将bert的fine-tune进行了介绍，构造句子对的形式，输入给bert得到pool后的矩阵，接全连接层得到分类结果</li>
 </ol>
-
+<img src="/2019/08/27/细粒度情感分析/bert.png" title="bert">
 
 <table>
 <thead>
@@ -470,7 +483,7 @@
 <ol>
 <li>该方法也是常规的操作，sentence和aspect都经过bert得到没有池化的三维矩阵，然后content和content自己做attention交互，content和target做attention交互，将两者做了attention交互后的矩阵在做一次attention交互，最后将三者cat起来，接输出层得到结果，模型如下：</li>
 </ol>
-
+<img src="/2019/08/27/细粒度情感分析/aen.png" title="aen">
 
 <table>
 <thead>
@@ -744,6 +757,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Wikipieda</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">平行语料</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">分词</a>
               </li>
              
@@ -752,11 +773,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Wikipieda</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">平行语料</a>
+                <a href="javascript:void(0)" class="js-tag color3">细粒度情感分析</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -769,10 +786,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NLP加速</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">细粒度情感分析</a>
               </li>
             
             <div class="clearfix"></div>
