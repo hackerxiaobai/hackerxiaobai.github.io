@@ -6,20 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>wordpiece和sentencepiece | 王磊的博客</title>
+  <title>unittest单元测试 | 王磊的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="wordpiece wordpiece的主要实现方式有BPE,BPE的大概训练过程：首先将词分成一个一个的字符，然后在词的范围内统计字符对出现的次数，每次将次数最多的字符对保存起来，直到循环次数结束。">
-<meta name="keywords" content="分词">
+  <meta name="description" content="为什么需要单元测试转载该博客，记录主要是自己日后查看   单元测试有没有必要？为什么需要单元测试？…… 理由简直多到不要不要的。总而言之，单元测试肯定是需要的。 对于算法工程师需要有单元测试吗？答案是：需要 最近老大要求我去对我负责的某个算法模块给出详细的单元报告，所以就写了一下这个报告">
+<meta name="keywords" content="unittest,单元测试">
 <meta property="og:type" content="article">
-<meta property="og:title" content="wordpiece和sentencepiece">
-<meta property="og:url" content="http://yoursite.com/2019/08/27/wordpiece和sentencepiece/index.html">
+<meta property="og:title" content="unittest单元测试">
+<meta property="og:url" content="http://yoursite.com/2019/09/02/unittest单元测试/index.html">
 <meta property="og:site_name" content="王磊的博客">
-<meta property="og:description" content="wordpiece wordpiece的主要实现方式有BPE,BPE的大概训练过程：首先将词分成一个一个的字符，然后在词的范围内统计字符对出现的次数，每次将次数最多的字符对保存起来，直到循环次数结束。">
+<meta property="og:description" content="为什么需要单元测试转载该博客，记录主要是自己日后查看   单元测试有没有必要？为什么需要单元测试？…… 理由简直多到不要不要的。总而言之，单元测试肯定是需要的。 对于算法工程师需要有单元测试吗？答案是：需要 最近老大要求我去对我负责的某个算法模块给出详细的单元报告，所以就写了一下这个报告">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-08-27T10:29:53.852Z">
+<meta property="og:updated_time" content="2019-09-02T07:38:23.780Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="wordpiece和sentencepiece">
-<meta name="twitter:description" content="wordpiece wordpiece的主要实现方式有BPE,BPE的大概训练过程：首先将词分成一个一个的字符，然后在词的范围内统计字符对出现的次数，每次将次数最多的字符对保存起来，直到循环次数结束。">
+<meta name="twitter:title" content="unittest单元测试">
+<meta name="twitter:description" content="为什么需要单元测试转载该博客，记录主要是自己日后查看   单元测试有没有必要？为什么需要单元测试？…… 理由简直多到不要不要的。总而言之，单元测试肯定是需要的。 对于算法工程师需要有单元测试吗？答案是：需要 最近老大要求我去对我负责的某个算法模块给出详细的单元报告，所以就写了一下这个报告">
   
     <link rel="alternative" href="/atom.xml" title="王磊的博客" type="application/atom+xml">
   
@@ -149,33 +149,53 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-wordpiece和sentencepiece" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-unittest单元测试" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      wordpiece和sentencepiece
+      unittest单元测试
     </h1>
   
 
         
-        <a href="/2019/08/27/wordpiece和sentencepiece/" class="archive-article-date">
-  	<time datetime="2019-08-27T08:07:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-27</time>
+        <a href="/2019/09/02/unittest单元测试/" class="archive-article-date">
+  	<time datetime="2019-09-02T07:23:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-02</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="wordpiece"><a href="#wordpiece" class="headerlink" title="wordpiece"></a>wordpiece</h3><ol>
-<li>wordpiece的主要实现方式有BPE,BPE的大概训练过程：首先将词分成一个一个的字符，然后在词的范围内统计字符对出现的次数，每次将次数最多的字符对保存起来，直到循环次数结束。<a id="more"></a>
-<h3 id="sentencepiece"><a href="#sentencepiece" class="headerlink" title="sentencepiece"></a>sentencepiece</h3></li>
-<li>原理是重复出现次数多的片断，就认为是一个意群（词）<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装</span></span><br><span class="line">sudo pip install SentencePiece</span><br><span class="line"></span><br><span class="line"><span class="comment"># 命令行训练</span></span><br><span class="line">spm_train --input=/tmp/a.txt --model_prefix=/tmp/test</span><br><span class="line"><span class="comment"># --input指定需要训练的文本文件，--model_prefix指定训练好的模型名，本例中生成/tmp/test.model </span></span><br><span class="line"><span class="comment"># 和/tmp/test.vocab两个文件，vocab是词典信息。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 命令行调用</span></span><br><span class="line">echo <span class="string">"食材上不会有这样的纠结"</span> | spm_encode --model=/tmp/test.model</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># python调用</span></span><br><span class="line"><span class="keyword">import</span> sentencepiece <span class="keyword">as</span> spm</span><br><span class="line">sp = spm.SentencePieceProcessor()</span><br><span class="line">text = <span class="string">"食材上不会有这样的纠结"</span> </span><br><span class="line">sp.Load(<span class="string">"/tmp/test.model"</span>) </span><br><span class="line">print(sp.EncodeAsPieces(text))</span><br></pre></td></tr></table></figure>
-
-</li>
+        <h1 id="为什么需要单元测试"><a href="#为什么需要单元测试" class="headerlink" title="为什么需要单元测试"></a>为什么需要单元测试</h1><p><a href="https://www.cnblogs.com/mapu/p/8549824.html" target="_blank" rel="noopener">转载该博客，记录主要是自己日后查看</a></p>
+<blockquote>
+<ol>
+<li>单元测试有没有必要？为什么需要单元测试？…… 理由简直多到不要不要的。总而言之，单元测试肯定是需要的。</li>
+<li>对于算法工程师需要有单元测试吗？答案是：需要</li>
+<li>最近老大要求我去对我负责的某个算法模块给出详细的单元报告，所以就写了一下这个报告</li>
 </ol>
+</blockquote>
+<a id="more"></a>
+<h1 id="单元测试模块unittest"><a href="#单元测试模块unittest" class="headerlink" title="单元测试模块unittest"></a>单元测试模块unittest</h1><blockquote>
+<ol>
+<li>unittest中最核心的四个概念是：test case, test suite, test runner, test fixture。</li>
+<li>unittest的静态类图</li>
+</ol>
+</blockquote>
+
+
+<blockquote>
+<p>一个TestCase的实例就是一个测试用例<br>多个测试用例集合在一起，就是TestSuite，而且TestSuite也可以嵌套TestSuite<br>TestLoader是用来加载TestCase到TestSuite中<br>TextTestRunner是来执行测试用例的，其中的run(test)会执行TestSuite/TestCase中的run(result)方法<br>对一个测试用例环境的搭建和销毁，是一个fixture</p>
+</blockquote>
+<p><strong>写好TestCase，然后由TestLoader加载TestCase到TestSuite，然后由TextTestRunner来运行TestSuite，运行的结果保存在TextTestResult中，我们通过命令行或者unittest.main()执行时，main会调用TextTestRunner中的run来执行，或者我们可以直接通过TextTestRunner来执行用例。这里加个说明，在Runner执行时，默认将执行结果输出到控制台，我们可以设置其输出到文件，在文件中查看结果（你可能听说过HTMLTestRunner，是的，通过它可以将结果输出到HTML中，生成漂亮的报告，它跟TextTestRunner是一样的，从名字就能看出来，这个我们后面再说）</strong></p>
+<h1 id="代码样例"><a href="#代码样例" class="headerlink" title="代码样例"></a>代码样例</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># mathfunc.py</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> a+b</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">minus</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> a-b</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">multi</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> a*b</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">divide</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> a/b</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># test_mathfunc.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> unittest</span><br><span class="line"><span class="keyword">from</span> mathfunc <span class="keyword">import</span> *</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TestMathFunc</span><span class="params">(unittest.TestCase)</span>:</span></span><br><span class="line">    <span class="string">"""Test mathfuc.py"""</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_add</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""Test method add(a, b)"""</span></span><br><span class="line">        self.assertEqual(<span class="number">3</span>, add(<span class="number">1</span>, <span class="number">2</span>))</span><br><span class="line">        self.assertNotEqual(<span class="number">3</span>, add(<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_minus</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""Test method minus(a, b)"""</span></span><br><span class="line">        self.assertEqual(<span class="number">1</span>, minus(<span class="number">3</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_multi</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""Test method multi(a, b)"""</span></span><br><span class="line">        self.assertEqual(<span class="number">6</span>, multi(<span class="number">2</span>, <span class="number">3</span>))</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">test_divide</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="string">"""Test method divide(a, b)"""</span></span><br><span class="line">        self.assertEqual(<span class="number">2</span>, divide(<span class="number">6</span>, <span class="number">3</span>))</span><br><span class="line">        self.assertEqual(<span class="number">2.5</span>, divide(<span class="number">5</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    unittest.main()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># test_suite.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> unittest</span><br><span class="line"><span class="keyword">from</span> test_mathfunc <span class="keyword">import</span> TestMathFunc</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    suite = unittest.TestSuite()</span><br><span class="line"></span><br><span class="line">    tests = [TestMathFunc(<span class="string">"test_add"</span>), TestMathFunc(<span class="string">"test_minus"</span>), TestMathFunc(<span class="string">"test_divide"</span>)]</span><br><span class="line">    suite.addTests(tests)</span><br><span class="line"></span><br><span class="line">    runner = unittest.TextTestRunner(verbosity=<span class="number">2</span>)</span><br><span class="line">    runner.run(suite)</span><br><span class="line"></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">输出到文件</span></span><br><span class="line"><span class="string">if __name__ == '__main__':</span></span><br><span class="line"><span class="string">    suite = unittest.TestSuite()</span></span><br><span class="line"><span class="string">    suite.addTests(unittest.TestLoader().loadTestsFromTestCase(TestMathFunc))</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    with open('UnittestTextReport.txt', 'a') as f:</span></span><br><span class="line"><span class="string">        runner = unittest.TextTestRunner(stream=f, verbosity=2)</span></span><br><span class="line"><span class="string">        runner.run(suite)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">'''</span></span><br></pre></td></tr></table></figure>
+
 
       
 
@@ -210,7 +230,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">分词</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">unittest</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">单元测试</a>
         		</li>
       		
 		</ul>
@@ -266,7 +290,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/08/27/wordpiece和sentencepiece/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/09/02/unittest单元测试/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -280,15 +304,11 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/08/27/笔试题/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          笔试题
-        
-      </div>
-    </a>
   
+    <a href="/2019/09/02/Prometheus监控告警/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Prometheus监控告警</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 
