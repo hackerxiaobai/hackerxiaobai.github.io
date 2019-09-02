@@ -6,18 +6,29 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives: 2019/8 | 王磊的博客</title>
+  <title>Prometheus监控告警 | 王磊的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="浙江理工大学19级，就职于杭州艾耕科技，从事NLP相关工作。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="王磊的博客">
-<meta property="og:url" content="http://yoursite.com/archives/2019/08/index.html">
+  <meta name="description" content="算法部门接入Prometheus，自定义报警监控步骤本文档不解释相关API的使用，自行查询 总体分3个步骤  在自己的服务模型中写入需要监控的代码，代码部署，运行起来，可以在监控页面搜索到自己的服务，可以看到你自己监控的一些数据，说明代码这一步就成功啦 配合Grafana跳转到图表显示面，进行配置。首先需要登陆，然后右上角会有一个add panel按钮，增加视图。点击add panel ，然后在刚">
+<meta name="keywords" content="Prometheus,Alert">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Prometheus监控告警">
+<meta property="og:url" content="http://yoursite.com/2019/09/02/Prometheus监控告警/index.html">
 <meta property="og:site_name" content="王磊的博客">
-<meta property="og:description" content="浙江理工大学19级，就职于杭州艾耕科技，从事NLP相关工作。">
+<meta property="og:description" content="算法部门接入Prometheus，自定义报警监控步骤本文档不解释相关API的使用，自行查询 总体分3个步骤  在自己的服务模型中写入需要监控的代码，代码部署，运行起来，可以在监控页面搜索到自己的服务，可以看到你自己监控的一些数据，说明代码这一步就成功啦 配合Grafana跳转到图表显示面，进行配置。首先需要登陆，然后右上角会有一个add panel按钮，增加视图。点击add panel ，然后在刚">
 <meta property="og:locale" content="en">
+<meta property="og:image" content="http://yoursite.com/2019/09/02/Prometheus监控告警/1.png">
+<meta property="og:image" content="http://yoursite.com/2019/09/02/Prometheus监控告警/2.png">
+<meta property="og:image" content="http://yoursite.com/2019/09/02/Prometheus监控告警/3.png">
+<meta property="og:image" content="http://yoursite.com/2019/09/02/Prometheus监控告警/4.png">
+<meta property="og:image" content="http://yoursite.com/2019/09/02/Prometheus监控告警/5.png">
+<meta property="og:image" content="http://yoursite.com/2019/09/02/Prometheus监控告警/6.png">
+<meta property="og:image" content="http://yoursite.com/2019/09/02/Prometheus监控告警/7.png">
+<meta property="og:image" content="http://yoursite.com/2019/09/02/Prometheus监控告警/8.png">
+<meta property="og:updated_time" content="2019-09-02T01:56:17.804Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="王磊的博客">
-<meta name="twitter:description" content="浙江理工大学19级，就职于杭州艾耕科技，从事NLP相关工作。">
+<meta name="twitter:title" content="Prometheus监控告警">
+<meta name="twitter:description" content="算法部门接入Prometheus，自定义报警监控步骤本文档不解释相关API的使用，自行查询 总体分3个步骤  在自己的服务模型中写入需要监控的代码，代码部署，运行起来，可以在监控页面搜索到自己的服务，可以看到你自己监控的一些数据，说明代码这一步就成功啦 配合Grafana跳转到图表显示面，进行配置。首先需要登陆，然后右上角会有一个add panel按钮，增加视图。点击add panel ，然后在刚">
+<meta name="twitter:image" content="http://yoursite.com/2019/09/02/Prometheus监控告警/1.png">
   
     <link rel="alternative" href="/atom.xml" title="王磊的博客" type="application/atom+xml">
   
@@ -147,262 +158,204 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-Prometheus监控告警" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Prometheus监控告警
+    </h1>
+  
+
+        
+        <a href="/2019/09/02/Prometheus监控告警/" class="archive-article-date">
+  	<time datetime="2019-09-02T01:43:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-02</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="算法部门接入Prometheus，自定义报警监控步骤"><a href="#算法部门接入Prometheus，自定义报警监控步骤" class="headerlink" title="算法部门接入Prometheus，自定义报警监控步骤"></a>算法部门接入Prometheus，自定义报警监控步骤</h1><h2 id="本文档不解释相关API的使用，自行查询"><a href="#本文档不解释相关API的使用，自行查询" class="headerlink" title="本文档不解释相关API的使用，自行查询"></a>本文档不解释相关API的使用，自行查询</h2><blockquote>
+<p>总体分3个步骤</p>
+<ol>
+<li>在自己的服务模型中写入需要监控的代码，代码部署，运行起来，可以在<a href="普罗米修斯提供的网页">监控页面</a>搜索到自己的服务，可以看到你自己监控的一些数据，说明代码这一步就成功啦</li>
+<li>配合Grafana跳转到图表显示面，进行配置。首先需要登陆，然后右上角会有一个add panel按钮，增加视图。<br>点击add panel ，然后在刚创建的 New Panel 中选择 Choose Visualization 按钮，默认是Graph，接着点击左侧的Queries，在查询输入框中填入要查询的 metric, 创建即可完成 </li>
+<li>接入Alert报警配置</li>
+</ol>
+</blockquote>
+<a id="more"></a>
+<h3 id="接下来具体说明上述3个步骤"><a href="#接下来具体说明上述3个步骤" class="headerlink" title="接下来具体说明上述3个步骤"></a>接下来具体说明上述3个步骤</h3><h4 id="step1-代码层"><a href="#step1-代码层" class="headerlink" title="step1 代码层"></a>step1 代码层</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">在自己的模型中写入相关代码，参考以下代码</span></span><br><span class="line"><span class="string">该代码监控的是用户输入不合法句子长度的个数</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="keyword">from</span> prometheus_client <span class="keyword">import</span> Metric, push_to_gateway, CollectorRegistry, Gauge, Counter</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">UserCommentRank</span><span class="params">(SimplexBaseModel)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, *args, **kwargs)</span>:</span></span><br><span class="line">        super(UserCommentRank, self).__init__(*args, **kwargs)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 生成 registry 实例</span></span><br><span class="line">        self.registry = CollectorRegistry()</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 统计不符合句子长度的句子数量</span></span><br><span class="line">        <span class="comment"># 创建 counter 类型对象</span></span><br><span class="line">        <span class="comment"># metric_name 名称在当前 register 中必须唯一, 建议使用 service 名称作为前缀</span></span><br><span class="line">        <span class="comment"># 描述信息可使用中英文</span></span><br><span class="line">        <span class="comment"># 指定 registry 收集该对象的监控数据</span></span><br><span class="line">        <span class="comment"># label_name 列表</span></span><br><span class="line">        self.SENT_LEN_COUNTS = Counter(<span class="string">'usercommentrank_sent_len_num'</span>,<span class="string">'不符合长度句子个数'</span>,registry=self.registry,labelnames=[<span class="string">'labels1'</span>])</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 别的一些代码</span></span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">predict</span><span class="params">(self, data, **kwargs)</span>:</span></span><br><span class="line">    </span><br><span class="line">        <span class="comment"># 处理你自己业务的一些代码</span></span><br><span class="line">        </span><br><span class="line">        illegal_sent_len_count = <span class="number">0</span></span><br><span class="line">        <span class="keyword">for</span> comment, score <span class="keyword">in</span> zip(raw_tmp, list(tmp_pred)):</span><br><span class="line">            <span class="keyword">if</span> len(comment) &lt; <span class="number">15</span>:</span><br><span class="line">                illegal_sent_len_count += <span class="number">1</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 计数统计加, 并添加 label valu</span></span><br><span class="line">        self.SENT_LEN_COUNTS.labels(labels1=<span class="string">'illegal_sent_len_value'</span>).inc(illegal_sent_len_count)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 将监控数据推送至 pushgateway, 设置 job 的名称为 service 的名称, 指定 registry</span></span><br><span class="line">        <span class="comment"># job 可以理解为该监控指标所属的集合, 名称必须全局唯一</span></span><br><span class="line">        push_to_gateway(<span class="string">'pgw.monitor.aipp.io'</span>, job=<span class="string">"usercommentrank_wl"</span>, registry=self.registry)</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>部署，运行起来,在<a href="http://ddprom.monitor.aipp.io/graph?g0.range_input=130m&g0.moment_input=2019-08-30%2006%3A32%3A08&g0.expr=&g0.tab=0" target="_blank" rel="noopener">监控页面</a>可以看到如下信息就说明代码层没有问题啦</p>
+</blockquote>
+<img src="/2019/09/02/Prometheus监控告警/1.png" title="1.png">
+
+<h4 id="step2-Grafana层"><a href="#step2-Grafana层" class="headerlink" title="step2 Grafana层"></a>step2 Grafana层</h4><blockquote>
+<ol>
+<li>右下角登陆</li>
+<li>点击add panel <img src="/2019/09/02/Prometheus监控告警/2.png" title="2.png"></li>
+<li>看到下图 <img src="/2019/09/02/Prometheus监控告警/3.png" title="3.png"></li>
+<li>点击Choose Visualization看到下图<img src="/2019/09/02/Prometheus监控告警/4.png" title="4.png"></li>
+<li>直接点击<img src="/2019/09/02/Prometheus监控告警/5.png" title="5.png">看到如下图，填写红线部分就OK啦（按自己的需求填写），右上角保存、刷新，此时就会看到你定的图<img src="/2019/09/02/Prometheus监控告警/6.png" title="6.png">
+</li>
+</ol>
+</blockquote>
+<h4 id="step3-Alert报警接入层"><a href="#step3-Alert报警接入层" class="headerlink" title="step3 Alert报警接入层"></a>step3 Alert报警接入层</h4><blockquote>
+<ol>
+<li>第二步完成后，按需配置告警，按照下面两图配置就好啦。（按自己的需求设置）<img src="/2019/09/02/Prometheus监控告警/7.png" title="7.png">
+<img src="/2019/09/02/Prometheus监控告警/8.png" title="8.png"></li>
+<li><strong>记得保存</strong>，最后你就可以将这个panel拖到你的你想放的地方中去啦。</li>
+</ol>
+</blockquote>
+<p><strong>自此，整个流程就打通啦</strong></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/08/28/Wikipedia构造平行语料/" class="archive-article-date">
-  	<time datetime="2019-08-28T09:06:42.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-28</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/08/28/Wikipedia构造平行语料/">Wikipedia构造平行语料</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Wikipieda</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Prometheus</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">平行语料</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Alert</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/09/02/Prometheus监控告警/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/08/28/Cython与Spacy加速NLP项目/" class="archive-article-date">
-  	<time datetime="2019-08-28T02:38:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-28</time>
-</a>
+<nav id="article-nav">
+  
+  
+    <a href="/2019/08/28/Wikipedia构造平行语料/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Wikipedia构造平行语料</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
         </div>
-    	 
+        
+        
+    </div>
+</aside>
+
+
+
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/08/28/Cython与Spacy加速NLP项目/">Cython与Spacy加速NLP项目</a>
-    </h1>
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Cython</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Spacy</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">NLP加速</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/08/27/细粒度情感分析/" class="archive-article-date">
-  	<time datetime="2019-08-27T08:45:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-27</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/08/27/细粒度情感分析/">细粒度情感分析</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">细粒度情感分析</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/08/27/数字转中文/" class="archive-article-date">
-  	<time datetime="2019-08-27T08:39:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-27</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/08/27/数字转中文/">数字转中文</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">笔试题</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/08/27/笔试题/" class="archive-article-date">
-  	<time datetime="2019-08-27T08:28:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-27</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/08/27/笔试题/">笔试题</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">笔试题</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/08/27/wordpiece和sentencepiece/" class="archive-article-date">
-  	<time datetime="2019-08-27T08:07:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-27</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/08/27/wordpiece和sentencepiece/">wordpiece和sentencepiece</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">分词</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -441,8 +394,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

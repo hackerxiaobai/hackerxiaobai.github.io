@@ -149,6 +149,91 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Prometheus监控告警" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/09/02/Prometheus监控告警/">Prometheus监控告警</a>
+    </h1>
+  
+
+        
+        <a href="/2019/09/02/Prometheus监控告警/" class="archive-article-date">
+  	<time datetime="2019-09-02T01:43:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-02</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="算法部门接入Prometheus，自定义报警监控步骤"><a href="#算法部门接入Prometheus，自定义报警监控步骤" class="headerlink" title="算法部门接入Prometheus，自定义报警监控步骤"></a>算法部门接入Prometheus，自定义报警监控步骤</h1><h2 id="本文档不解释相关API的使用，自行查询"><a href="#本文档不解释相关API的使用，自行查询" class="headerlink" title="本文档不解释相关API的使用，自行查询"></a>本文档不解释相关API的使用，自行查询</h2><blockquote>
+<p>总体分3个步骤</p>
+<ol>
+<li>在自己的服务模型中写入需要监控的代码，代码部署，运行起来，可以在<a href="普罗米修斯提供的网页">监控页面</a>搜索到自己的服务，可以看到你自己监控的一些数据，说明代码这一步就成功啦</li>
+<li>配合Grafana跳转到图表显示面，进行配置。首先需要登陆，然后右上角会有一个add panel按钮，增加视图。<br>点击add panel ，然后在刚创建的 New Panel 中选择 Choose Visualization 按钮，默认是Graph，接着点击左侧的Queries，在查询输入框中填入要查询的 metric, 创建即可完成 </li>
+<li>接入Alert报警配置</li>
+</ol>
+</blockquote>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Prometheus</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Alert</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/09/02/Prometheus监控告警/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-Wikipedia构造平行语料" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -725,6 +810,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Prometheus</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Alert</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Wikipieda</a>
               </li>
              
@@ -733,15 +826,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">分词</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">笔试题</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">细粒度情感分析</a>
+                <a href="javascript:void(0)" class="js-tag color3">分词</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -754,6 +843,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NLP加速</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">细粒度情感分析</a>
               </li>
             
             <div class="clearfix"></div>
