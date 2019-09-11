@@ -6,20 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>wordpiece和sentencepiece | 王磊的博客</title>
+  <title>论文复现(一) | 王磊的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="wordpiece wordpiece的主要实现方式有BPE,BPE的大概训练过程：首先将词分成一个一个的字符，然后在词的范围内统计字符对出现的次数，每次将次数最多的字符对保存起来，直到循环次数结束。">
-<meta name="keywords" content="分词">
+  <meta name="description" content="OpenTag_2019github Scaling Up Open Tagging from Tens to Thousands: Comprehension Empowered Attribute Value Extraction from Product Title  该论文是在OpenTag: Open Attribute Value Extraction from Product Pro">
+<meta name="keywords" content="OpenTag,CRF,NER,属性抽取">
 <meta property="og:type" content="article">
-<meta property="og:title" content="wordpiece和sentencepiece">
-<meta property="og:url" content="http://yoursite.com/2019/08/27/wordpiece和sentencepiece/index.html">
+<meta property="og:title" content="论文复现(一)">
+<meta property="og:url" content="http://yoursite.com/2019/09/11/论文复现_OpenTag2019/index.html">
 <meta property="og:site_name" content="王磊的博客">
-<meta property="og:description" content="wordpiece wordpiece的主要实现方式有BPE,BPE的大概训练过程：首先将词分成一个一个的字符，然后在词的范围内统计字符对出现的次数，每次将次数最多的字符对保存起来，直到循环次数结束。">
+<meta property="og:description" content="OpenTag_2019github Scaling Up Open Tagging from Tens to Thousands: Comprehension Empowered Attribute Value Extraction from Product Title  该论文是在OpenTag: Open Attribute Value Extraction from Product Pro">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-08-27T10:29:53.852Z">
+<meta property="og:updated_time" content="2019-09-11T12:27:22.662Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="wordpiece和sentencepiece">
-<meta name="twitter:description" content="wordpiece wordpiece的主要实现方式有BPE,BPE的大概训练过程：首先将词分成一个一个的字符，然后在词的范围内统计字符对出现的次数，每次将次数最多的字符对保存起来，直到循环次数结束。">
+<meta name="twitter:title" content="论文复现(一)">
+<meta name="twitter:description" content="OpenTag_2019github Scaling Up Open Tagging from Tens to Thousands: Comprehension Empowered Attribute Value Extraction from Product Title  该论文是在OpenTag: Open Attribute Value Extraction from Product Pro">
   
     <link rel="alternative" href="/atom.xml" title="王磊的博客" type="application/atom+xml">
   
@@ -149,33 +149,38 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-wordpiece和sentencepiece" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-论文复现_OpenTag2019" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      wordpiece和sentencepiece
+      论文复现(一)
     </h1>
   
 
         
-        <a href="/2019/08/27/wordpiece和sentencepiece/" class="archive-article-date">
-  	<time datetime="2019-08-27T08:07:58.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-27</time>
+        <a href="/2019/09/11/论文复现_OpenTag2019/" class="archive-article-date">
+  	<time datetime="2019-09-11T12:15:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-11</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="wordpiece"><a href="#wordpiece" class="headerlink" title="wordpiece"></a>wordpiece</h3><ol>
-<li>wordpiece的主要实现方式有BPE,BPE的大概训练过程：首先将词分成一个一个的字符，然后在词的范围内统计字符对出现的次数，每次将次数最多的字符对保存起来，直到循环次数结束。<a id="more"></a>
-<h3 id="sentencepiece"><a href="#sentencepiece" class="headerlink" title="sentencepiece"></a>sentencepiece</h3></li>
-<li>原理是重复出现次数多的片断，就认为是一个意群（词）<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 安装</span></span><br><span class="line">sudo pip install SentencePiece</span><br><span class="line"></span><br><span class="line"><span class="comment"># 命令行训练</span></span><br><span class="line">spm_train --input=/tmp/a.txt --model_prefix=/tmp/test</span><br><span class="line"><span class="comment"># --input指定需要训练的文本文件，--model_prefix指定训练好的模型名，本例中生成/tmp/test.model </span></span><br><span class="line"><span class="comment"># 和/tmp/test.vocab两个文件，vocab是词典信息。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 命令行调用</span></span><br><span class="line">echo <span class="string">"食材上不会有这样的纠结"</span> | spm_encode --model=/tmp/test.model</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># python调用</span></span><br><span class="line"><span class="keyword">import</span> sentencepiece <span class="keyword">as</span> spm</span><br><span class="line">sp = spm.SentencePieceProcessor()</span><br><span class="line">text = <span class="string">"食材上不会有这样的纠结"</span> </span><br><span class="line">sp.Load(<span class="string">"/tmp/test.model"</span>) </span><br><span class="line">print(sp.EncodeAsPieces(text))</span><br></pre></td></tr></table></figure>
+        <h1 id="OpenTag-2019"><a href="#OpenTag-2019" class="headerlink" title="OpenTag_2019"></a>OpenTag_2019</h1><p><a href="https://github.com/hackerxiaobai/OpenTag_2019" target="_blank" rel="noopener">github</a></p>
+<p><a href="https://www.aclweb.org/anthology/P19-1514" target="_blank" rel="noopener">Scaling Up Open Tagging from Tens to Thousands: Comprehension Empowered Attribute Value Extraction from Product Title</a></p>
+<blockquote>
+<p>该论文是在<a href="https://arxiv.org/pdf/1806.01264.pdf" target="_blank" rel="noopener">OpenTag: Open Attribute Value Extraction from Product Profiles</a>的基础上做的改进。模型结构如下：</p>
+</blockquote>
+<a id="more"></a>
 
-</li>
-</ol>
+
+
+
+
+
 
       
 
@@ -210,7 +215,19 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">分词</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">OpenTag</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">CRF</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">NER</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">属性抽取</a>
         		</li>
       		
 		</ul>
@@ -266,7 +283,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/08/27/wordpiece和sentencepiece/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/09/11/论文复现_OpenTag2019/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -280,15 +297,11 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/08/27/笔试题/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          笔试题
-        
-      </div>
-    </a>
   
+    <a href="/2019/09/02/unittest单元测试/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">unittest单元测试</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
 </nav>
 
