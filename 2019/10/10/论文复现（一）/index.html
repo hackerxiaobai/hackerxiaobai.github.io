@@ -8,17 +8,20 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>论文复现（一） | 王磊的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="浙江理工大学19级，就职于杭州艾耕科技，从事NLP相关工作。">
+  <meta name="description" content="论文复现 类NER的方式从商品title中抽取需要的属性值，该论文采用了单BIO标签，所有属性都采用这一种标签模式，避免了随着属性值多的情况，标签数量剧增的情况github代码">
+<meta name="keywords" content="OpenTag">
 <meta property="og:type" content="article">
 <meta property="og:title" content="论文复现（一）">
 <meta property="og:url" content="http://yoursite.com/2019/10/10/论文复现（一）/index.html">
 <meta property="og:site_name" content="王磊的博客">
-<meta property="og:description" content="浙江理工大学19级，就职于杭州艾耕科技，从事NLP相关工作。">
+<meta property="og:description" content="论文复现 类NER的方式从商品title中抽取需要的属性值，该论文采用了单BIO标签，所有属性都采用这一种标签模式，避免了随着属性值多的情况，标签数量剧增的情况github代码">
 <meta property="og:locale" content="en">
-<meta property="og:updated_time" content="2019-10-10T06:21:51.072Z">
+<meta property="og:image" content="http://yoursite.com/2019/10/10/论文复现（一）/1.png">
+<meta property="og:updated_time" content="2019-10-10T06:42:11.791Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="论文复现（一）">
-<meta name="twitter:description" content="浙江理工大学19级，就职于杭州艾耕科技，从事NLP相关工作。">
+<meta name="twitter:description" content="论文复现 类NER的方式从商品title中抽取需要的属性值，该论文采用了单BIO标签，所有属性都采用这一种标签模式，避免了随着属性值多的情况，标签数量剧增的情况github代码">
+<meta name="twitter:image" content="http://yoursite.com/2019/10/10/论文复现（一）/1.png">
   
     <link rel="alternative" href="/atom.xml" title="王磊的博客" type="application/atom+xml">
   
@@ -168,7 +171,18 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h1 id="论文复现"><a href="#论文复现" class="headerlink" title="论文复现"></a>论文复现</h1><blockquote>
+<p>类NER的方式从商品title中抽取需要的属性值，该论文采用了单BIO标签，所有属性都采用这一种标签模式，避免了随着属性值多的情况，标签数量剧增的情况<br><a href="https://github.com/hackerxiaobai/OpenTag_2019" target="_blank" rel="noopener">github代码</a></p>
+</blockquote>
+<a id="more"></a>
+<p><a href="https://www.aclweb.org/anthology/P19-1514/" target="_blank" rel="noopener">Scaling up Open Tagging from Tens to Thousands: Comprehension Empowered Attribute Value Extraction from Product Title</a></p>
+<p>该论文是在OpenTag: <a href="https://arxiv.org/pdf/1806.01264.pdf" target="_blank" rel="noopener">Open Attribute Value Extraction from Product Profiles</a>的基础上做的改进。模型结构如下：</p>
+<img src="/2019/10/10/论文复现（一）/1.png" title="模型结构图">
+
+<blockquote>
+<p>从这个模型架构上来看，实现并不复杂，将title和attribute分别分词经过embedding后输入双向LSTM，title端经过LSTM后拿的是所有时间上的hidden，attribute经过lstm后只拿last hidden，之后两者做一个cos相似度计算，得到的矩阵和title经过lstm后的cat起来，输入到CRF层进行序列标注就OK了，具体实现看代码吧。</p>
+</blockquote>
+
       
 
       
@@ -197,6 +211,17 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">OpenTag</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -450,6 +475,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">NLP加速</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">属性抽取</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">OpenTag</a>
               </li>
             
             <div class="clearfix"></div>
