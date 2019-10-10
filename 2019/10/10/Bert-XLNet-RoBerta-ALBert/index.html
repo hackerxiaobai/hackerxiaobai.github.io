@@ -6,22 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>笔试题 | 王磊的博客</title>
+  <title>Bert XLNet RoBerta ALBert | 王磊的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="将list中具有重复子串的str删除，保留最长子串** 如图: **">
-<meta name="keywords" content="笔试题">
+  <meta name="description" content="Bert 自编码语言模型。mask语言模型， next sentence   mask预训练和finetune两阶段不一致，mask之间相互独立">
+<meta name="keywords" content="Bert XLNet RoBerta ALBert">
 <meta property="og:type" content="article">
-<meta property="og:title" content="笔试题">
-<meta property="og:url" content="http://yoursite.com/2019/08/27/笔试题/index.html">
+<meta property="og:title" content="Bert XLNet RoBerta ALBert">
+<meta property="og:url" content="http://yoursite.com/2019/10/10/Bert-XLNet-RoBerta-ALBert/index.html">
 <meta property="og:site_name" content="王磊的博客">
-<meta property="og:description" content="将list中具有重复子串的str删除，保留最长子串** 如图: **">
+<meta property="og:description" content="Bert 自编码语言模型。mask语言模型， next sentence   mask预训练和finetune两阶段不一致，mask之间相互独立">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="http://yoursite.com/2019/08/27/笔试题/1.png">
-<meta property="og:updated_time" content="2019-08-27T10:59:02.625Z">
+<meta property="og:updated_time" content="2019-10-10T03:48:01.863Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="笔试题">
-<meta name="twitter:description" content="将list中具有重复子串的str删除，保留最长子串** 如图: **">
-<meta name="twitter:image" content="http://yoursite.com/2019/08/27/笔试题/1.png">
+<meta name="twitter:title" content="Bert XLNet RoBerta ALBert">
+<meta name="twitter:description" content="Bert 自编码语言模型。mask语言模型， next sentence   mask预训练和finetune两阶段不一致，mask之间相互独立">
   
     <link rel="alternative" href="/atom.xml" title="王磊的博客" type="application/atom+xml">
   
@@ -151,30 +149,66 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-笔试题" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-Bert-XLNet-RoBerta-ALBert" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      笔试题
+      Bert XLNet RoBerta ALBert
     </h1>
   
 
         
-        <a href="/2019/08/27/笔试题/" class="archive-article-date">
-  	<time datetime="2019-08-27T08:28:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-27</time>
+        <a href="/2019/10/10/Bert-XLNet-RoBerta-ALBert/" class="archive-article-date">
+  	<time datetime="2019-10-10T03:36:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-10</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="将list中具有重复子串的str删除，保留最长子串"><a href="#将list中具有重复子串的str删除，保留最长子串" class="headerlink" title="将list中具有重复子串的str删除，保留最长子串"></a>将list中具有重复子串的str删除，保留最长子串</h3><p>** 如图: **</p>
-<img src="/2019/08/27/笔试题/1.png" title="笔试说明">
+        <h3 id="Bert"><a href="#Bert" class="headerlink" title="Bert"></a>Bert</h3><blockquote>
+<p>自编码语言模型。mask语言模型， next sentence   mask预训练和finetune两阶段不一致，mask之间相互独立</p>
+</blockquote>
 <a id="more"></a>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 本人采用了最简单的两次for循环暴力解决，</span></span><br><span class="line"><span class="comment"># 有人会说trie就可以搞定啊，但是似乎不能搞定哟</span></span><br><span class="line"><span class="comment"># 第二个原因是尽量用原生的简单方法搞定它</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 有什么好的方法，欢迎留言哟</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 去重且将排序，倒序           </span></span><br><span class="line">tmp = list(set(tmp))</span><br><span class="line">tmp.sort(key=<span class="keyword">lambda</span> x: len(x),reverse=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># 搜出子串 </span></span><br><span class="line">sub_str = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(tmp)<span class="number">-1</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(i+<span class="number">1</span>,len(tmp)):</span><br><span class="line">        <span class="keyword">if</span> tmp[j] <span class="keyword">in</span> tmp[i]:</span><br><span class="line">            sub_str.append(tmp[j])</span><br><span class="line">        </span><br><span class="line"><span class="comment"># 得到最终的最长字符串 </span></span><br><span class="line">final_tmp = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> tmp:</span><br><span class="line">    <span class="comment"># 得到不在子串中且不是单个字符的数据</span></span><br><span class="line">    <span class="keyword">if</span> i <span class="keyword">not</span> <span class="keyword">in</span> sub_str <span class="keyword">and</span> len(i)&gt;=<span class="number">2</span>:</span><br><span class="line">        final_tmp.append(i)</span><br></pre></td></tr></table></figure>
+
+<h3 id="XLNet"><a href="#XLNet" class="headerlink" title="XLNet"></a>XLNet</h3><blockquote>
+<p>自回归语言模型，但是不采用mask机制， 句子固定其中摸一个词，剩下的词随机排列组合，但是在finetune阶段是不能将句子排列组合原始输入的，所以，就必须让预训练阶段的输入部分，看上去仍然是x1,x2,x3,x4这个输入顺序，但是可以在Transformer部分做些工作，来达成我们希望的目标。具体而言，XLNet采取了Attention掩码的机制，你可以理解为，当前的输入句子是X，要预测的单词Ti是第i个单词，前面1到i-1个单词，在输入部分观察，并没发生变化，该是谁还是谁。但是在Transformer内部，通过Attention掩码，从X的输入单词里面，也就是Ti的上文和下文单词中，随机选择i-1个，放到Ti的上文位置中，把其它单词的输入通过Attention掩码隐藏掉，于是就能够达成我们期望的目标（当然这个所谓放到Ti的上文位置，只是一种形象的说法，其实在内部，就是通过Attention Mask，把其它没有被选到的单词Mask掉，不让它们在预测单词Ti的时候发生作用，如此而已。</p>
+</blockquote>
+<blockquote>
+<p>GPT2.0的核心其实是更多更高质量的预训练数据，这个明显也被XLNet吸收进来了；再然后，Transformer XL的主要思想也被吸收进来，它的主要目标是解决Transformer对于长文档NLP应用不够友好的问题。</p>
+</blockquote>
+<h3 id="RoBerta"><a href="#RoBerta" class="headerlink" title="RoBerta"></a>RoBerta</h3><p><strong>静态Masking vs 动态Masking</strong></p>
+<blockquote>
+<p>原来Bert对每一个序列随机选择15%的Tokens替换成[MASK]，为了消除与下游任务的不匹配，还对这15%的Tokens进行（1）80%的时间替换成[MASK]；（2）10%的时间不变；（3）10%的时间替换成其他词。但整个训练过程，这15%的Tokens一旦被选择就不再改变，也就是说从一开始随机选择了这15%的Tokens，之后的N个epoch里都不再改变了。这就叫做静态Masking。</p>
+</blockquote>
+<blockquote>
+<p>而RoBERTa一开始把预训练的数据复制10份，每一份都随机选择15%的Tokens进行Masking，也就是说，同样的一句话有10种不同的mask方式。然后每份数据都训练N/10个epoch。这就相当于在这N个epoch的训练中，每个序列的被mask的tokens是会变化的。这就叫做动态Masking。</p>
+</blockquote>
+<p><strong>with NSP vs without NSP</strong></p>
+<blockquote>
+<p>原本的Bert为了捕捉句子之间的关系，使用了NSP任务进行预训练，就是输入一对句子A和B，判断这两个句子是否是连续的。在训练的数据中，50%的B是A的下一个句子，50%的B是随机抽取的。而RoBERTa去除了NSP，而是每次输入连续的多个句子，直到最大长度512（可以跨文章）。这种训练方式叫做（FULL - SENTENCES），而原来的Bert每次只输入两个句子。实验表明在MNLI这种推断句子关系的任务上RoBERTa也能有更好性能。</p>
+</blockquote>
+<p><strong>更大的mini-batch</strong></p>
+<blockquote>
+<p>原本的BERTbase 的batch size是256，训练1M个steps。RoBERTa的batch size为8k。为什么要用更大的batch size呢？（除了因为他们有钱玩得起外）作者借鉴了在机器翻译中，用更大的batch size配合更大学习率能提升模型优化速率和模型性能的现象，并且也用实验证明了确实Bert还能用更大的batch size</p>
+</blockquote>
+<p><strong>更多的数据，更长时间的训练</strong></p>
+<h3 id="ALBert"><a href="#ALBert" class="headerlink" title="ALBert"></a>ALBert</h3><p><strong>词嵌入向量参数的因式分解 Factorized embedding parameterization</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">O(V * H) to O(V * E + E * H)</span><br><span class="line"></span><br><span class="line">如以ALBert_xxlarge为例，V=<span class="number">30000</span>, H=<span class="number">4096</span>, E=<span class="number">128</span></span><br><span class="line"></span><br><span class="line">那么原先参数为V * H= <span class="number">30000</span> * <span class="number">4096</span> = <span class="number">1.23</span>亿个参数，现在则为V * E + E * H = <span class="number">30000</span>*<span class="number">128</span>+<span class="number">128</span>*<span class="number">4096</span> = <span class="number">384</span>万 + <span class="number">52</span>万 = <span class="number">436</span>万，</span><br><span class="line"></span><br><span class="line">词嵌入相关的参数变化前是变换后的<span class="number">28</span>倍。</span><br></pre></td></tr></table></figure>
+
+<p><strong>跨层参数共享 Cross-Layer Parameter Sharing</strong></p>
+<blockquote>
+<p>参数共享能显著减少参数。共享可以分为全连接层、注意力层的参数共享；注意力层的参数对效果的减弱影响小一点。</p>
+</blockquote>
+<p><strong>段落连续性任务 Inter-sentence coherence loss.</strong></p>
+<blockquote>
+<p>使用段落连续性任务。正例，使用从一个文档中连续的两个文本段落；负例，使用从一个文档中连续的两个文本段落，但位置调换了。避免使用原有的NSP任务，原有的任务包含隐含了预测主题这类过于简单的任务。</p>
+</blockquote>
+<p><strong>其他</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>）去掉了dropout  Remove dropout to enlarge capacity of model.</span><br><span class="line">    最大的模型，训练了<span class="number">1</span>百万步后，还是没有过拟合训练数据。说明模型的容量还可以更大，就移除了dropout</span><br><span class="line">    （dropout可以认为是随机的去掉网络中的一部分，同时使网络变小一些）</span><br><span class="line">    We also note that, even after training <span class="keyword">for</span> <span class="number">1</span>M steps, our largest models still do <span class="keyword">not</span> overfit to their training data. </span><br><span class="line">    As a result, we decide to remove dropout to further increase our model capacity.</span><br><span class="line">    其他型号的模型，在我们的实现中我们还是会保留原始的dropout的比例，防止模型对训练数据的过拟合。</span><br><span class="line">    </span><br><span class="line"><span class="number">2</span>）为加快训练速度，使用LAMB做为优化器 Use LAMB <span class="keyword">as</span> optimizer, to train <span class="keyword">with</span> big batch size</span><br><span class="line">  使用了大的batch_size来训练(<span class="number">4096</span>)。 LAMB优化器使得我们可以训练，特别大的批次batch_size，如高达<span class="number">6</span>万。</span><br><span class="line"></span><br><span class="line"><span class="number">3</span>）使用n-gram(uni-gram,bi-gram, tri-gram）来做遮蔽语言模型 Use n-gram <span class="keyword">as</span> make language model</span><br><span class="line">   即以不同的概率使用n-gram,uni-gram的概率最大，bi-gram其次，tri-gram概率最小。</span><br><span class="line">   本项目中目前使用的是在中文上做whole word mask，稍后会更新一下与n-gram mask的效果对比。n-gram从spanBERT中来。</span><br></pre></td></tr></table></figure>
 
 
       
@@ -210,7 +244,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">笔试题</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Bert XLNet RoBerta ALBert</a>
         		</li>
       		
 		</ul>
@@ -266,7 +300,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/08/27/笔试题/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/10/10/Bert-XLNet-RoBerta-ALBert/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -280,18 +314,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/08/27/数字转中文/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          数字转中文
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/08/27/wordpiece和sentencepiece/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">wordpiece和sentencepiece</div>
+    <a href="/2019/09/11/论文复现_OpenTag2019/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">论文复现(一)</div>
       <i class="icon-circle-right"></i>
     </a>
   

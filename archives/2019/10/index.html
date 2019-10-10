@@ -6,22 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>笔试题 | 王磊的博客</title>
+  <title>Archives: 2019/10 | 王磊的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="将list中具有重复子串的str删除，保留最长子串** 如图: **">
-<meta name="keywords" content="笔试题">
-<meta property="og:type" content="article">
-<meta property="og:title" content="笔试题">
-<meta property="og:url" content="http://yoursite.com/2019/08/27/笔试题/index.html">
+  <meta name="description" content="浙江理工大学19级，就职于杭州艾耕科技，从事NLP相关工作。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="王磊的博客">
+<meta property="og:url" content="http://yoursite.com/archives/2019/10/index.html">
 <meta property="og:site_name" content="王磊的博客">
-<meta property="og:description" content="将list中具有重复子串的str删除，保留最长子串** 如图: **">
+<meta property="og:description" content="浙江理工大学19级，就职于杭州艾耕科技，从事NLP相关工作。">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="http://yoursite.com/2019/08/27/笔试题/1.png">
-<meta property="og:updated_time" content="2019-08-27T10:59:02.625Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="笔试题">
-<meta name="twitter:description" content="将list中具有重复子串的str删除，保留最长子串** 如图: **">
-<meta name="twitter:image" content="http://yoursite.com/2019/08/27/笔试题/1.png">
+<meta name="twitter:title" content="王磊的博客">
+<meta name="twitter:description" content="浙江理工大学19级，就职于杭州艾耕科技，从事NLP相关工作。">
   
     <link rel="alternative" href="/atom.xml" title="王磊的博客" type="application/atom+xml">
   
@@ -151,180 +147,60 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-笔试题" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      笔试题
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2019" class="archive-year">2019</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2019/10/10/Bert-XLNet-RoBerta-ALBert/" class="archive-article-date">
+  	<time datetime="2019-10-10T03:36:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-10</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2019/10/10/Bert-XLNet-RoBerta-ALBert/">Bert XLNet RoBerta ALBert</a>
     </h1>
   
 
-        
-        <a href="/2019/08/27/笔试题/" class="archive-article-date">
-  	<time datetime="2019-08-27T08:28:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-08-27</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="将list中具有重复子串的str删除，保留最长子串"><a href="#将list中具有重复子串的str删除，保留最长子串" class="headerlink" title="将list中具有重复子串的str删除，保留最长子串"></a>将list中具有重复子串的str删除，保留最长子串</h3><p>** 如图: **</p>
-<img src="/2019/08/27/笔试题/1.png" title="笔试说明">
-<a id="more"></a>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 本人采用了最简单的两次for循环暴力解决，</span></span><br><span class="line"><span class="comment"># 有人会说trie就可以搞定啊，但是似乎不能搞定哟</span></span><br><span class="line"><span class="comment"># 第二个原因是尽量用原生的简单方法搞定它</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 有什么好的方法，欢迎留言哟</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 去重且将排序，倒序           </span></span><br><span class="line">tmp = list(set(tmp))</span><br><span class="line">tmp.sort(key=<span class="keyword">lambda</span> x: len(x),reverse=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># 搜出子串 </span></span><br><span class="line">sub_str = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(tmp)<span class="number">-1</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(i+<span class="number">1</span>,len(tmp)):</span><br><span class="line">        <span class="keyword">if</span> tmp[j] <span class="keyword">in</span> tmp[i]:</span><br><span class="line">            sub_str.append(tmp[j])</span><br><span class="line">        </span><br><span class="line"><span class="comment"># 得到最终的最长字符串 </span></span><br><span class="line">final_tmp = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> tmp:</span><br><span class="line">    <span class="comment"># 得到不在子串中且不是单个字符的数据</span></span><br><span class="line">    <span class="keyword">if</span> i <span class="keyword">not</span> <span class="keyword">in</span> sub_str <span class="keyword">and</span> len(i)&gt;=<span class="number">2</span>:</span><br><span class="line">        final_tmp.append(i)</span><br></pre></td></tr></table></figure>
-
-
-      
-
-      
-        <div class="page-reward">
-          <a href="javascript:;" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
-        </div>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">笔试题</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Bert XLNet RoBerta ALBert</a>
         		</li>
       		
 		</ul>
 	</div>
 
-      
+          
 
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
         </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/08/27/笔试题/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2019/08/27/数字转中文/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          数字转中文
-        
-      </div>
-    </a>
   
   
-    <a href="/2019/08/27/wordpiece和sentencepiece/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">wordpiece和sentencepiece</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-  
-  
+    </div></section>
   
 
-  
-
-  
-
-  
+    
 
 
           </div>
@@ -363,8 +239,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
-		isArchive: false,
+		isPost: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
