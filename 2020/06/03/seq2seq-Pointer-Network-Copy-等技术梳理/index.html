@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="OpenTag,">
+  <meta name="keywords" content="Pointer-Network,Summarization,seq2seq,copy,">
 
 
 
@@ -79,20 +79,20 @@
 
 
 
-<meta name="description" content="论文复现 类NER的方式从商品title中抽取需要的属性值，该论文采用了单BIO标签，所有属性都采用这一种标签模式，避免了随着属性值多的情况，标签数量剧增的情况github代码">
-<meta name="keywords" content="OpenTag">
+<meta name="description" content="之前或多或少都有去关注以及该方面的paper阅读，但是并没有去好好的整理该技术的整体发展，今天闲来无事，想从代码以及paper的核心思想梳理一遍。供自己后续方便查看吧。  Pointer Networkspaper pytorch code 传统的seq2seq模型是无法解决输出序列的词汇表会随着输入序列长度的改变而改变的问题，所以一个很简单的想法就是为什么输出不能直接从输入端直接拿过来呢？那直">
+<meta name="keywords" content="Pointer-Network,Summarization,seq2seq,copy">
 <meta property="og:type" content="article">
-<meta property="og:title" content="论文复现（一）">
-<meta property="og:url" content="http://yoursite.com/2019/10/10/论文复现（一）/index.html">
+<meta property="og:title" content="seq2seq Pointer-Network Copy 等技术梳理">
+<meta property="og:url" content="http://yoursite.com/2020/06/03/seq2seq-Pointer-Network-Copy-等技术梳理/index.html">
 <meta property="og:site_name" content="王磊的博客">
-<meta property="og:description" content="论文复现 类NER的方式从商品title中抽取需要的属性值，该论文采用了单BIO标签，所有属性都采用这一种标签模式，避免了随着属性值多的情况，标签数量剧增的情况github代码">
+<meta property="og:description" content="之前或多或少都有去关注以及该方面的paper阅读，但是并没有去好好的整理该技术的整体发展，今天闲来无事，想从代码以及paper的核心思想梳理一遍。供自己后续方便查看吧。  Pointer Networkspaper pytorch code 传统的seq2seq模型是无法解决输出序列的词汇表会随着输入序列长度的改变而改变的问题，所以一个很简单的想法就是为什么输出不能直接从输入端直接拿过来呢？那直">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="http://yoursite.com/2019/10/10/论文复现（一）/1.png">
-<meta property="og:updated_time" content="2019-10-10T06:42:11.791Z">
+<meta property="og:image" content="http://yoursite.com/2020/06/03/seq2seq-Pointer-Network-Copy-等技术梳理/1.png">
+<meta property="og:updated_time" content="2020-06-03T09:05:11.148Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="论文复现（一）">
-<meta name="twitter:description" content="论文复现 类NER的方式从商品title中抽取需要的属性值，该论文采用了单BIO标签，所有属性都采用这一种标签模式，避免了随着属性值多的情况，标签数量剧增的情况github代码">
-<meta name="twitter:image" content="http://yoursite.com/2019/10/10/论文复现（一）/1.png">
+<meta name="twitter:title" content="seq2seq Pointer-Network Copy 等技术梳理">
+<meta name="twitter:description" content="之前或多或少都有去关注以及该方面的paper阅读，但是并没有去好好的整理该技术的整体发展，今天闲来无事，想从代码以及paper的核心思想梳理一遍。供自己后续方便查看吧。  Pointer Networkspaper pytorch code 传统的seq2seq模型是无法解决输出序列的词汇表会随着输入序列长度的改变而改变的问题，所以一个很简单的想法就是为什么输出不能直接从输入端直接拿过来呢？那直">
+<meta name="twitter:image" content="http://yoursite.com/2020/06/03/seq2seq-Pointer-Network-Copy-等技术梳理/1.png">
 
 
 
@@ -122,13 +122,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/10/10/论文复现（一）/">
+  <link rel="canonical" href="http://yoursite.com/2020/06/03/seq2seq-Pointer-Network-Copy-等技术梳理/">
 
 
 
 
 
-  <title>论文复现（一） | 王磊的博客</title>
+  <title>seq2seq Pointer-Network Copy 等技术梳理 | 王磊的博客</title>
   
 
 
@@ -239,7 +239,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/10/论文复现（一）/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/03/seq2seq-Pointer-Network-Copy-等技术梳理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="王磊">
@@ -256,7 +256,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">论文复现（一）</h1>
+          <h1 class="post-title" itemprop="name headline">seq2seq Pointer-Network Copy 等技术梳理</h1>
         
 
         <div class="post-meta">
@@ -268,8 +268,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-10T14:21:51+08:00">
-                2019-10-10
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-03T15:17:07+08:00">
+                2020-06-03
               </time>
             
 
@@ -306,17 +306,14 @@
       
 
       
-        <h1 id="论文复现"><a href="#论文复现" class="headerlink" title="论文复现"></a>论文复现</h1><blockquote>
-<p>类NER的方式从商品title中抽取需要的属性值，该论文采用了单BIO标签，所有属性都采用这一种标签模式，避免了随着属性值多的情况，标签数量剧增的情况<br><a href="https://github.com/hackerxiaobai/OpenTag_2019" target="_blank" rel="noopener">github代码</a></p>
+        <blockquote>
+<p>之前或多或少都有去关注以及该方面的paper阅读，但是并没有去好好的整理该技术的整体发展，今天闲来无事，想从代码以及paper的核心思想梳理一遍。供自己后续方便查看吧。</p>
 </blockquote>
-<a id="more"></a>
-<p><a href="https://www.aclweb.org/anthology/P19-1514/" target="_blank" rel="noopener">Scaling up Open Tagging from Tens to Thousands: Comprehension Empowered Attribute Value Extraction from Product Title</a></p>
-<p>该论文是在OpenTag: <a href="https://arxiv.org/pdf/1806.01264.pdf" target="_blank" rel="noopener">Open Attribute Value Extraction from Product Profiles</a>的基础上做的改进。模型结构如下：</p>
-<img src="/2019/10/10/论文复现（一）/1.png" title="模型结构图">
+<h3 id="Pointer-Networks"><a href="#Pointer-Networks" class="headerlink" title="Pointer Networks"></a>Pointer Networks</h3><p><strong><a href="https://arxiv.org/abs/1506.03134" target="_blank" rel="noopener">paper</a></strong></p>
+<p><strong><a href="https://github.com/shirgur/PointerNet" target="_blank" rel="noopener">pytorch code</a></strong></p>
+<p>传统的seq2seq模型是无法解决输出序列的词汇表会随着输入序列长度的改变而改变的问题，所以一个很简单的想法就是为什么输出不能直接从输入端直接拿过来呢？那直接从输入端拿过来，具体要怎么操作呢？这就是该篇文章给出的一个思路，该篇文章给出的形象解释是凸包问题，如图所示</p>
+<img src="/2020/06/03/seq2seq-Pointer-Network-Copy-等技术梳理/1.png" title="1.png">
 
-<blockquote>
-<p>从这个模型架构上来看，实现并不复杂，将title和attribute分别分词经过embedding后输入双向LSTM，title端经过LSTM后拿的是所有时间上的hidden，attribute经过lstm后只拿last hidden，之后两者做一个cos相似度计算，得到的矩阵和title经过lstm后的cat起来，输入到CRF层进行序列标注就OK了，具体实现看代码吧。</p>
-</blockquote>
 
       
     </div>
@@ -334,7 +331,13 @@
       
         <div class="post-tags">
           
-            <a href="/tags/OpenTag/" rel="tag"># OpenTag</a>
+            <a href="/tags/Pointer-Network/" rel="tag"># Pointer-Network</a>
+          
+            <a href="/tags/Summarization/" rel="tag"># Summarization</a>
+          
+            <a href="/tags/seq2seq/" rel="tag"># seq2seq</a>
+          
+            <a href="/tags/copy/" rel="tag"># copy</a>
           
         </div>
       
@@ -347,8 +350,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/10/10/Bert-XLNet-RoBerta-ALBert/" rel="next" title="Bert XLNet RoBerta ALBert">
-                <i class="fa fa-chevron-left"></i> Bert XLNet RoBerta ALBert
+              <a href="/2020/05/28/git简单使用记录/" rel="next" title="git简单使用记录">
+                <i class="fa fa-chevron-left"></i> git简单使用记录
               </a>
             
           </div>
@@ -356,10 +359,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2020/04/01/lintcode-刷题/" rel="prev" title="lintcode 刷题">
-                lintcode 刷题 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -482,7 +481,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#论文复现"><span class="nav-number">1.</span> <span class="nav-text">论文复现</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Pointer-Networks"><span class="nav-number">1.</span> <span class="nav-text">Pointer Networks</span></a></li></ol></div>
             
 
           </div>
