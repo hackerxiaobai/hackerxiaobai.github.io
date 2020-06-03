@@ -79,19 +79,19 @@
 
 
 
-<meta name="description" content="之前或多或少都有去关注以及该方面的paper阅读，但是并没有去好好的整理该技术的整体发展，今天闲来无事，想从代码以及paper的核心思想梳理一遍。供自己后续方便查看吧。  Pointer Networkspaper pytorch code 传统的seq2seq模型是无法解决输出序列的词汇表会随着输入序列长度的改变而改变的问题，所以一个很简单的想法就是为什么输出不能直接从输入端直接拿过来呢？那直">
+<meta name="description" content="之前或多或少都有去关注以及该方面的paper阅读，但是并没有去好好的整理该技术的整体发展，今天闲来无事，想从代码以及paper的核心思想梳理一遍。供自己后续方便查看吧。  Pointer Networks">
 <meta name="keywords" content="Pointer-Network,Summarization,seq2seq,copy">
 <meta property="og:type" content="article">
 <meta property="og:title" content="seq2seq Pointer-Network Copy 等技术梳理">
 <meta property="og:url" content="http://yoursite.com/2020/06/03/seq2seq-Pointer-Network-Copy-等技术梳理/index.html">
 <meta property="og:site_name" content="王磊的博客">
-<meta property="og:description" content="之前或多或少都有去关注以及该方面的paper阅读，但是并没有去好好的整理该技术的整体发展，今天闲来无事，想从代码以及paper的核心思想梳理一遍。供自己后续方便查看吧。  Pointer Networkspaper pytorch code 传统的seq2seq模型是无法解决输出序列的词汇表会随着输入序列长度的改变而改变的问题，所以一个很简单的想法就是为什么输出不能直接从输入端直接拿过来呢？那直">
+<meta property="og:description" content="之前或多或少都有去关注以及该方面的paper阅读，但是并没有去好好的整理该技术的整体发展，今天闲来无事，想从代码以及paper的核心思想梳理一遍。供自己后续方便查看吧。  Pointer Networks">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="http://yoursite.com/2020/06/03/seq2seq-Pointer-Network-Copy-等技术梳理/1.png">
-<meta property="og:updated_time" content="2020-06-03T09:05:11.148Z">
+<meta property="og:updated_time" content="2020-06-03T10:56:49.183Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="seq2seq Pointer-Network Copy 等技术梳理">
-<meta name="twitter:description" content="之前或多或少都有去关注以及该方面的paper阅读，但是并没有去好好的整理该技术的整体发展，今天闲来无事，想从代码以及paper的核心思想梳理一遍。供自己后续方便查看吧。  Pointer Networkspaper pytorch code 传统的seq2seq模型是无法解决输出序列的词汇表会随着输入序列长度的改变而改变的问题，所以一个很简单的想法就是为什么输出不能直接从输入端直接拿过来呢？那直">
+<meta name="twitter:description" content="之前或多或少都有去关注以及该方面的paper阅读，但是并没有去好好的整理该技术的整体发展，今天闲来无事，想从代码以及paper的核心思想梳理一遍。供自己后续方便查看吧。  Pointer Networks">
 <meta name="twitter:image" content="http://yoursite.com/2020/06/03/seq2seq-Pointer-Network-Copy-等技术梳理/1.png">
 
 
@@ -309,11 +309,46 @@
         <blockquote>
 <p>之前或多或少都有去关注以及该方面的paper阅读，但是并没有去好好的整理该技术的整体发展，今天闲来无事，想从代码以及paper的核心思想梳理一遍。供自己后续方便查看吧。</p>
 </blockquote>
-<h3 id="Pointer-Networks"><a href="#Pointer-Networks" class="headerlink" title="Pointer Networks"></a>Pointer Networks</h3><p><strong><a href="https://arxiv.org/abs/1506.03134" target="_blank" rel="noopener">paper</a></strong></p>
+<h3 id="Pointer-Networks"><a href="#Pointer-Networks" class="headerlink" title="Pointer Networks"></a>Pointer Networks</h3><a id="more"></a>
+
+<p><strong><a href="https://arxiv.org/abs/1506.03134" target="_blank" rel="noopener">paper</a></strong></p>
 <p><strong><a href="https://github.com/shirgur/PointerNet" target="_blank" rel="noopener">pytorch code</a></strong></p>
 <p>传统的seq2seq模型是无法解决输出序列的词汇表会随着输入序列长度的改变而改变的问题，所以一个很简单的想法就是为什么输出不能直接从输入端直接拿过来呢？那直接从输入端拿过来，具体要怎么操作呢？这就是该篇文章给出的一个思路，该篇文章给出的形象解释是凸包问题，如图所示</p>
 <img src="/2020/06/03/seq2seq-Pointer-Network-Copy-等技术梳理/1.png" title="1.png">
 
+<p>对上图的一个简单解释：给定p1到p4四个二维坐标，找到一个凸包。答案是p1-&gt;p4-&gt;p2-&gt;p1，图a就是传统的seq2seq做法，就是把四个点的坐标作为输入序列输入进去，然后提供一个词汇表：[start, 1, 2, 3, 4, end]，最后依据词汇表预测出序列[start, 1, 4, 2, 1, end]，缺点作者也提到过了，对于图a的传统seq2seq模型来说，它的输出词汇表已经限定，当输入序列的长度变化的时候（如变为10个点）它根本无法预测大于4的数字。因为你的词汇表限定了最大就是4。图b是作者提出的Pointer Networks，它预测的时候每一步都找当前输入序列中权重最大的那个元素，而由于输出序列完全来自输入序列，它可以适应输入序列的长度变化。那具体的是怎么处理的呢？下面就直接从代码实现层面来简单说一下。</p>
+<p><strong>还是以解凸包问题说起</strong></p>
+<p>每一个batch5个坐标点，那最开始的输入就是：(假设batch 256)</p>
+<p>inputs.shape (256，5，2)</p>
+<p>假设embedding是128，那inputs 经过embedding后的shape就是：</p>
+<p>embedded_inputs（256，5，128）</p>
+<p>然后进行encode，假设用了LSTM，（uints假设为512）那它会输出 encoder_outputs 和 encoder_hidden，shape分别是：</p>
+<p>encoder_outputs（256, 5, 512） </p>
+<p>encoder_hidden（256, 512）</p>
+<p>接下来我们就要开始decode了，重点就是decode端去实现如何直接拿输入的信息了，其实对于这种seq2seq现在都会做一个attention的操作，那该paper其实就是在attention上做了简化，通过attention的操作得到一个alpha，通过alpha间接去拿输入端embedded_inputs 的具体某一个坐标的embedding。下面看一下decode端的一个操作吧：decode的输入主要是这四个值 </p>
+<p>embedded_inputs   （256, 5, 128）就是encode端的embedding</p>
+<p>decoder_input0  （256, 128）因为是t0时刻，所以这个值最开始是随机初始化的</p>
+<p>decoder_hidden0 （256, 512）就是拿了encode端最后一个时刻的隐状态作为decode端的开始状态</p>
+<p>encoder_outputs （256, 5, 512） </p>
+<p>将 decoder_input0 和 decoder_hidden0 经过一个时刻的LSTM操作得到t1 的 h_t, 然后将 encoder_outputs 和 t_1 时刻的h_t 输入到attention，此时attention操作就是计算出一个alpha。具体如何计算呢，继续往下看：</p>
+<p>我们知道上面操作得到的 h_t维度是（256，512）， encoder_outputs 维度是（256, 5, 512） ，我们将h_t 进行repeat操作，维度变成 （256, 5, 512），h_t 和 encoder_outputs做一下维度变换，变成（256，512，5），然后这个encoder_outputs进行一次Conv1d操作，其实做不做这个操作我觉得影响也不是很大，该操作是不改变维度的，所以经过Conv1d操作后维度还是（256, 5, 512），在attention这里呢我们会一开始初始化一个变量，假设是V吧，，他的维度呢就是（256，512）的矩阵。（该矩阵呢其实是为了后面计算得到alpha的一个中间变量吧）为了矩阵操作方便，我们会将V进行维度扩展，变成（256，1，512），然后做一个这样的操作 </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">att = torch.bmm(V, self.tanh(h_t+ encoder_outputs)).squeeze(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+<p>所以此时得到的 att 的维度就是 （256，5），此时呢，直接对这个att 进行 softmax操作，得到alpha，然后将 alpha 和 encoder_outputs做一个计算，得到一个 hidden_state </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hidden_state = torch.bmm(encoder_outputs, alpha.unsqueeze(<span class="number">2</span>)).squeeze(<span class="number">2</span>)  </span><br><span class="line"><span class="comment"># hidden_state shape is （256，512）</span></span><br></pre></td></tr></table></figure>
+
+<p>至此，attention操作就结束了，最后返回的就是 alpha 和 hidden_state</p>
+<p>那到此呢，我们只是拿到了alpha而已，那怎么通过这个alpha直接到embedded_inputs去拿对应索引的embeding呢？接着往下看：</p>
+<p>拿到的alpha会做一个max操作，如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">max_probs, indices = alpha.max(<span class="number">1</span>)</span><br><span class="line"><span class="comment"># 因为是输出随着输入变化而变化，所以一开始呢，我们会初始化一个runner，</span></span><br><span class="line"><span class="comment"># 比如我们这里坐标的个数采用了5，所以runner呢就会初始化成 [0,1,2,3,4] 的列表，</span></span><br><span class="line"><span class="comment"># 然后将它repeat到batch_size 大小，所以 runner的shape就是（256，5），然后呢，做一个这样操作：</span></span><br><span class="line"></span><br><span class="line">one_hot_pointers = (runner == indices.unsqueeze(<span class="number">1</span>).expand(<span class="number">-1</span>, alpha.size()[<span class="number">1</span>])).float()</span><br><span class="line"><span class="comment"># 所以此时呢 one_hot_pointers 就是一个 0/1 矩阵，其实就是 5个坐标 对应取哪一个坐标的索引嘛</span></span><br><span class="line"><span class="comment"># 然后通过这个矩阵到 embedded_inputs去挑一些embedding来做decode端 t1 时刻的 输入啦，具体操作如下：</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Get embedded inputs by max indices             </span></span><br><span class="line">embedding_mask = one_hot_pointers.unsqueeze(<span class="number">2</span>).expand(<span class="number">-1</span>, <span class="number">-1</span>, self.embedding_dim).byte()             decoder_input = embedded_inputs[embedding_mask.data].view(batch_size, self.embedding_dim)</span><br><span class="line"><span class="comment"># 从这里我们可以看大下一个时刻的 decoder_input 其实是直接通过alpha取max后对应的索引到 </span></span><br><span class="line"><span class="comment"># embedded_inputs直接拿到的。t2、t3...时刻以此类推，都是这样的操作</span></span><br></pre></td></tr></table></figure>
+
+<p>到现在为止，已经解释了如何直接从输入端来取embedding来做为decode端的输入了，但是最终我们要拿到这个凸包的输出还没有解释，下面就简单来看一下吧，其实很简单了：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">outputs.append(alpha.unsqueeze(<span class="number">0</span>))             </span><br><span class="line">pointers.append(indices.unsqueeze(<span class="number">1</span>))</span><br><span class="line"><span class="comment"># 我们的坐标个数取的是5，所以其实是会循环5次上面这个操作，每一步拿到一个，最后cat起来</span></span><br><span class="line"></span><br><span class="line">outputs = torch.cat(outputs).permute(<span class="number">1</span>, <span class="number">0</span>, <span class="number">2</span>)    <span class="comment"># （256，5，5）     </span></span><br><span class="line">pointers = torch.cat(pointers, <span class="number">1</span>)  <span class="comment"># （256，5）</span></span><br></pre></td></tr></table></figure>
+
+<p>最终，返回的outputs 会参与模型计算loss，至此，整个 Pointer Network 的代码实现就解释完了。或许有点懵。直接阅读代码吧，配合这个解释会特别清晰<br><strong>阅读code</strong></p>
+<p><strong>阅读code</strong></p>
+<p><strong>阅读code</strong></p>
+<p>重要的事情说三遍，Down</p>
 
       
     </div>
