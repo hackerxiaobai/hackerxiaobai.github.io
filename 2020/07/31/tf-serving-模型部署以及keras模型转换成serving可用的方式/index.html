@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/NLP.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/NLP.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="tf-serving,keras,model 转成 serving,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="tf-serving 模型部署 由于之前一直都是使用pytorch,部署就一直也没去关心tf-serving那一套鬼东西,近期使用了一段时间tf,keras,涉及到部署问题,当然这就离不开serving了,所以就做一个使用总结,供自己后续参考吧,别又忘记了 网上资料一大堆,如果你是熟悉这些东西的,没有必要往下看了 那就先从一般的 tf模型代码说起吧">
+<meta name="keywords" content="tf-serving,keras,model 转成 serving">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tf-serving 模型部署以及keras模型转换成serving可用的方式">
+<meta property="og:url" content="http://yoursite.com/2020/07/31/tf-serving-模型部署以及keras模型转换成serving可用的方式/index.html">
+<meta property="og:site_name" content="王磊的博客">
+<meta property="og:description" content="tf-serving 模型部署 由于之前一直都是使用pytorch,部署就一直也没去关心tf-serving那一套鬼东西,近期使用了一段时间tf,keras,涉及到部署问题,当然这就离不开serving了,所以就做一个使用总结,供自己后续参考吧,别又忘记了 网上资料一大堆,如果你是熟悉这些东西的,没有必要往下看了 那就先从一般的 tf模型代码说起吧">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://yoursite.com/2020/07/31/tf-serving-模型部署以及keras模型转换成serving可用的方式/1.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/07/31/tf-serving-模型部署以及keras模型转换成serving可用的方式/2.jpg">
+<meta property="og:updated_time" content="2020-08-03T03:01:16.674Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="tf-serving 模型部署以及keras模型转换成serving可用的方式">
+<meta name="twitter:description" content="tf-serving 模型部署 由于之前一直都是使用pytorch,部署就一直也没去关心tf-serving那一套鬼东西,近期使用了一段时间tf,keras,涉及到部署问题,当然这就离不开serving了,所以就做一个使用总结,供自己后续参考吧,别又忘记了 网上资料一大堆,如果你是熟悉这些东西的,没有必要往下看了 那就先从一般的 tf模型代码说起吧">
+<meta name="twitter:image" content="http://yoursite.com/2020/07/31/tf-serving-模型部署以及keras模型转换成serving可用的方式/1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/07/31/tf-serving-模型部署以及keras模型转换成serving可用的方式/">
+
+
+
+
+
+  <title>tf-serving 模型部署以及keras模型转换成serving可用的方式 | 王磊的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">王磊的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">凡所有相，皆是虚妄</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-github">
+          <a href="https://github.com/hackerxiaobai" rel="section">
+            
+            github
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/31/tf-serving-模型部署以及keras模型转换成serving可用的方式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="王磊">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="王磊的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">tf-serving 模型部署以及keras模型转换成serving可用的方式</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-31T20:11:12+08:00">
+                2020-07-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="tf-serving-模型部署"><a href="#tf-serving-模型部署" class="headerlink" title="tf-serving 模型部署"></a>tf-serving 模型部署</h3><ul>
+<li>由于之前一直都是使用pytorch,部署就一直也没去关心tf-serving那一套鬼东西,近期使用了一段时间tf,keras,涉及到部署问题,当然这就离不开serving了,所以就做一个使用总结,供自己后续参考吧,别又忘记了</li>
+<li>网上资料一大堆,如果你是熟悉这些东西的,没有必要往下看了</li>
+<li>那就先从一般的 tf模型代码说起吧</li>
+</ul>
+<a id="more"></a>
+
+<blockquote>
+<p>简单定义一个tf模型</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> shutil</span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">add_layer</span><span class="params">(inputs, input_size, output_size, activation_function=None)</span>:</span></span><br><span class="line">    weights = tf.Variable(tf.random_normal([input_size, output_size]))</span><br><span class="line">    biases = tf.Variable(tf.zeros([<span class="number">1</span>, output_size]) + <span class="number">0.1</span>)</span><br><span class="line">    wx_plus_b = tf.matmul(inputs, weights) + biases  <span class="comment"># WX + b</span></span><br><span class="line">    <span class="keyword">if</span> activation_function <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        outputs = wx_plus_b</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        outputs = activation_function(wx_plus_b)</span><br><span class="line">    <span class="keyword">return</span> outputs</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"><span class="comment"># 造一些随机输入数据</span></span><br><span class="line">num_points = <span class="number">30000</span>  <span class="comment"># 总数据条数</span></span><br><span class="line">feature_number = <span class="number">100</span>  <span class="comment"># 每条输入数据有100个feature</span></span><br><span class="line"><span class="comment"># num_points个输入数据,每个有feature_number个feature,即输入数据的维度是(num_points,feature_number)</span></span><br><span class="line">x_data = np.random.rand(num_points, feature_number)</span><br><span class="line">y_data = np.random.randint(<span class="number">0</span>, <span class="number">2</span>, (num_points, <span class="number">1</span>))  <span class="comment"># nx1的数组, 每一行为1个数(0或1)</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># 用于接收输入的Tensor</span></span><br><span class="line">x_actual = tf.placeholder(tf.float32, [<span class="literal">None</span>, feature_number], name=<span class="string">"myInput"</span>)</span><br><span class="line">y_actual = tf.placeholder(tf.float32, [<span class="literal">None</span>, <span class="number">1</span>], name=<span class="string">"myOutput"</span>)</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 隐层1</span></span><br><span class="line">l1 = add_layer(x_actual, feature_number, <span class="number">32</span>, activation_function=tf.nn.relu)</span><br><span class="line"><span class="comment"># 隐层2</span></span><br><span class="line">l2 = add_layer(l1, <span class="number">32</span>, <span class="number">64</span>, activation_function=tf.nn.tanh)</span><br><span class="line"><span class="comment"># 隐层3</span></span><br><span class="line">l3 = add_layer(l2, <span class="number">64</span>, <span class="number">32</span>, activation_function=tf.nn.relu)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出层</span></span><br><span class="line">y_predict = add_layer(l3, <span class="number">32</span>, <span class="number">1</span>, activation_function=tf.nn.sigmoid)</span><br><span class="line"><span class="comment"># 损失函数</span></span><br><span class="line">loss = -tf.reduce_mean(y_actual * tf.log(tf.clip_by_value(y_predict, <span class="number">1e-10</span>, <span class="number">1.0</span>)))</span><br><span class="line"><span class="comment"># 优化器</span></span><br><span class="line">train_step = tf.train.AdamOptimizer(<span class="number">0.001</span>).minimize(loss)</span><br><span class="line"> </span><br><span class="line">init = tf.global_variables_initializer()</span><br><span class="line"><span class="comment"># 迭代次数</span></span><br><span class="line">num_iterations = <span class="number">10000</span></span><br><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br><span class="line">    sess.run(init)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(num_iterations):</span><br><span class="line">        <span class="comment"># 训练模型</span></span><br><span class="line">        sess.run(train_step, feed_dict=&#123;x_actual: x_data, y_actual: y_data&#125;)</span><br><span class="line">        <span class="keyword">if</span> i % <span class="number">500</span> == <span class="number">0</span>:</span><br><span class="line">            prediction_value = sess.run(y_predict, feed_dict=&#123;x_actual: x_data&#125;)</span><br><span class="line">            print(sess.run(loss, feed_dict=&#123;x_actual: x_data, y_actual: y_data&#125;))</span><br><span class="line">    <span class="comment"># 训练完成后,以SavedModel格式保存模型文件</span></span><br><span class="line">    model_output_dir = <span class="string">"./model/201908070001"</span></span><br><span class="line">    <span class="keyword">if</span> os.path.exists(model_output_dir):  <span class="comment"># 目录存在</span></span><br><span class="line">        shutil.rmtree(model_output_dir)  <span class="comment"># 删除原目录</span></span><br><span class="line">    tf.saved_model.simple_save(</span><br><span class="line">        sess, model_output_dir, inputs=&#123;<span class="string">"myInput"</span>: x_actual&#125;, outputs=&#123;<span class="string">"myOutput"</span>: y_predict&#125;)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>保存模型的目录大概是有这几个文件</li>
+</ul>
+<img src="/2020/07/31/tf-serving-模型部署以及keras模型转换成serving可用的方式/1.jpg" title="说明">
+
+<ul>
+<li><p>接下来拉一个TensorFlow-Serving的Docker镜像</p>
+<ul>
+<li><strong>docker pull tensorflow/serving</strong></li>
+</ul>
+</li>
+<li><p>下载完后，再 cd 到上面输出的“model”目录的上一级目录,运行下面的命令</p>
+<ul>
+<li><p>TESTDATA=”$(pwd)/model”</p>
+<p>docker run -t –rm -p 8501:8501 \</p>
+<p>  -v “$TESTDATA:/models/simple_fc_nn” \</p>
+<p>  -e MODEL_NAME=simple_fc_nn \</p>
+<p>  tensorflow/serving </p>
+</li>
+</ul>
+</li>
+<li><p>这样就可以把模型serve起来了。其中，端口号可以自己改，simple_fc_nn是我自己起的模型名称，在后面使用REST API来访问TF-Serving服务的时候，会用到这个名称。</p>
+</li>
+<li><p>通过REST API查看服务状态</p>
+<ul>
+<li><strong>curl <a href="http://localhost:8501/v1/models/simple_fc_nn" target="_blank" rel="noopener">http://localhost:8501/v1/models/simple_fc_nn</a></strong></li>
+</ul>
+</li>
+<li><p>这里可以看到，URL里的simple_fc_nn就是在启动TF-Serving服务的时候指定的那个名字。<br>另外，这里使用的是localhost，所以必须在TF-Serving运行的同一台机器上执行该命令。<br>返回：</p>
+<ul>
+<li><img src="/2020/07/31/tf-serving-模型部署以及keras模型转换成serving可用的方式/2.jpg" title="说明"></li>
+</ul>
+</li>
+<li><p>通过REST API查看模型的元数据</p>
+<ul>
+<li><strong>curl <a href="http://localhost:8501/v1/models/simple_fc_nn/metadata" target="_blank" rel="noopener">http://localhost:8501/v1/models/simple_fc_nn/metadata</a></strong></li>
+</ul>
+</li>
+<li><p>通过Apache ab对TF-Serving进行性能测试 post.txt 里放的是输入数据,(转成json的格式)</p>
+<ul>
+<li><strong>ab -n 100000 -c 50 -T ‘Content-Type:application/json’ -p ./post.txt <a href="http://localhost:8501/v1/models/simple_fc_nn:predict" target="_blank" rel="noopener">http://localhost:8501/v1/models/simple_fc_nn:predict</a></strong></li>
+</ul>
+</li>
+</ul>
+<h3 id="keras-模型-转到-tf-serving-可用的pb格式"><a href="#keras-模型-转到-tf-serving-可用的pb格式" class="headerlink" title="keras 模型 转到 tf-serving 可用的pb格式"></a>keras 模型 转到 tf-serving 可用的pb格式</h3><ul>
+<li>直接看代码吧</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">keras_model_2_tf_serving</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="string">'''</span></span><br><span class="line"><span class="string">	    keras model会自动保存为pb格式</span></span><br><span class="line"><span class="string">	'''</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">export_model</span><span class="params">(model,export_model_dir,model_version)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :param export_model_dir: type string, save dir for exported model    url</span></span><br><span class="line"><span class="string">        :param model_version: type int best</span></span><br><span class="line"><span class="string">        :return:no return</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">with</span> tf.get_default_graph().as_default():</span><br><span class="line">            <span class="comment"># prediction_signature</span></span><br><span class="line">            tensor_info_input_0 = tf.saved_model.utils.build_tensor_info(model.input[<span class="number">0</span>])</span><br><span class="line">            tensor_info_input_1 = tf.saved_model.utils.build_tensor_info(model.input[<span class="number">1</span>])</span><br><span class="line">            tensor_info_output = tf.saved_model.utils.build_tensor_info(model.output)</span><br><span class="line">            prediction_signature = (</span><br><span class="line">                tf.saved_model.signature_def_utils.build_signature_def(</span><br><span class="line">                    inputs =&#123;<span class="string">'input_0'</span>: tensor_info_input_0,<span class="string">'input_1'</span>: tensor_info_input_1&#125;, <span class="comment"># Tensorflow.TensorInfo</span></span><br><span class="line">                    outputs=&#123;<span class="string">'result'</span>: tensor_info_output&#125;,</span><br><span class="line">                    <span class="comment">#method_name=tf.saved_model.signature_constants.PREDICT_METHOD_NAME)</span></span><br><span class="line">                    method_name= <span class="string">"tensorflow/serving/predict"</span>)</span><br><span class="line">                </span><br><span class="line">            )</span><br><span class="line">            print(<span class="string">'step1 =&gt; prediction_signature created successfully'</span>)</span><br><span class="line">            <span class="comment"># set-up a builder</span></span><br><span class="line">            os.mkdir(export_model_dir)</span><br><span class="line">            export_path_base = export_model_dir</span><br><span class="line">            export_path = os.path.join(</span><br><span class="line">                tf.compat.as_bytes(export_path_base),</span><br><span class="line">                tf.compat.as_bytes(str(model_version)))</span><br><span class="line">            builder = tf.saved_model.builder.SavedModelBuilder(export_path)</span><br><span class="line">            builder.add_meta_graph_and_variables(</span><br><span class="line">                <span class="comment"># tags:SERVING,TRAINING,EVAL,GPU,TPU</span></span><br><span class="line">                sess=K.get_session(),</span><br><span class="line">                tags=[tf.saved_model.tag_constants.SERVING],</span><br><span class="line">                clear_devices=<span class="literal">True</span>,</span><br><span class="line">                signature_def_map=&#123;</span><br><span class="line">                    <span class="string">'predict'</span>:prediction_signature,</span><br><span class="line">                    tf.saved_model.signature_constants.DEFAULT_SERVING_SIGNATURE_DEF_KEY: prediction_signature,</span><br><span class="line"></span><br><span class="line">                &#125;,</span><br><span class="line">                )</span><br><span class="line">            print(<span class="string">'step2 =&gt; Export path(%s) ready to export trained model'</span> % export_path, <span class="string">'\n starting to export model...'</span>)</span><br><span class="line">            <span class="comment">#builder.save(as_text=True)</span></span><br><span class="line">            builder.save()</span><br><span class="line">            print(<span class="string">'Done exporting!'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">'model_config_classification.json'</span>) <span class="keyword">as</span> json_file:</span><br><span class="line">        json_config = json_file.read()</span><br><span class="line">    model = keras.models.model_from_json(json_config)</span><br><span class="line">    model.load_weights(<span class="string">'model_weights_classification.h5'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 导出tf-serving的方式</span></span><br><span class="line">    export_model(model,<span class="string">"tf-serving-model"</span>,<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 通过上面的转换,可以用tf-serving启起来</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">TESTDATA="$(pwd)/tf-serving-model"</span></span><br><span class="line"><span class="string">docker run -t --rm -p 8503:8501 \</span></span><br><span class="line"><span class="string">    -v "$TESTDATA:/models/bert" \</span></span><br><span class="line"><span class="string">    -e MODEL_NAME=bert \</span></span><br><span class="line"><span class="string">    tensorflow/serving</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">predict_tf_serving</span><span class="params">()</span>:</span></span><br><span class="line">    sent = <span class="string">"来玩英雄联盟"</span></span><br><span class="line">    tokenid_train =  tokenizer.encode(sent,maxlen=<span class="number">200</span>)[<span class="number">0</span>] </span><br><span class="line">    sen_id_train =   tokenizer.encode(sent,maxlen=<span class="number">200</span>)[<span class="number">1</span>]</span><br><span class="line">    SERVER_URL = <span class="string">"http://localhost:8503/v1/models/bert:predict"</span></span><br><span class="line">    predict_request=<span class="string">'&#123;"signature_name": "predict", "instances":[&#123;"input_0":%s,"input_1":%s&#125;] &#125;'</span> %(tokenid_train,sen_id_train)</span><br><span class="line">    response = requests.post(SERVER_URL, data=predict_request)</span><br><span class="line">    res = json.loads(response.content)</span><br><span class="line">    print(res)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>大概就是这么一个样子吧,看懂就👌</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/tf-serving/" rel="tag"># tf-serving</a>
+          
+            <a href="/tags/keras/" rel="tag"># keras</a>
+          
+            <a href="/tags/model-转成-serving/" rel="tag"># model 转成 serving</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/31/NLP-训练一个模型-太简单了吧/" rel="next" title="NLP 训练一个模型,太简单了吧">
+                <i class="fa fa-chevron-left"></i> NLP 训练一个模型,太简单了吧
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/08/03/面试题-数据结构格式拍平/" rel="prev" title="面试题(数据结构格式拍平)">
+                面试题(数据结构格式拍平) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">王磊</p>
+              <p class="site-description motion-element" itemprop="description">浙江理工大学19级，就职于杭州艾耕科技，从事NLP相关工作。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#tf-serving-模型部署"><span class="nav-number">1.</span> <span class="nav-text">tf-serving 模型部署</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#keras-模型-转到-tf-serving-可用的pb格式"><span class="nav-number">2.</span> <span class="nav-text">keras 模型 转到 tf-serving 可用的pb格式</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王磊</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

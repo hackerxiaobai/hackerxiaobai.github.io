@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/NLP.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/NLP.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="NLP,huggingface,transformer,训练模型,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="太简单了吧!!!​        现在随着深度学习各种框架以及高阶API的封装,自己从头搭一个模型真的是成本太低了,说白了,也就是现在入门或者简单跑跑demo的门槛几乎为零,接下来就简单的聊聊两个库的使用吧  transformers nlp">
+<meta name="keywords" content="NLP,huggingface,transformer,训练模型">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NLP 训练一个模型,太简单了吧">
+<meta property="og:url" content="http://yoursite.com/2020/07/31/NLP-训练一个模型-太简单了吧/index.html">
+<meta property="og:site_name" content="王磊的博客">
+<meta property="og:description" content="太简单了吧!!!​        现在随着深度学习各种框架以及高阶API的封装,自己从头搭一个模型真的是成本太低了,说白了,也就是现在入门或者简单跑跑demo的门槛几乎为零,接下来就简单的聊聊两个库的使用吧  transformers nlp">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-07-31T12:18:24.941Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="NLP 训练一个模型,太简单了吧">
+<meta name="twitter:description" content="太简单了吧!!!​        现在随着深度学习各种框架以及高阶API的封装,自己从头搭一个模型真的是成本太低了,说白了,也就是现在入门或者简单跑跑demo的门槛几乎为零,接下来就简单的聊聊两个库的使用吧  transformers nlp">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/07/31/NLP-训练一个模型-太简单了吧/">
+
+
+
+
+
+  <title>NLP 训练一个模型,太简单了吧 | 王磊的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">王磊的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">凡所有相，皆是虚妄</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-github">
+          <a href="https://github.com/hackerxiaobai" rel="section">
+            
+            github
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/31/NLP-训练一个模型-太简单了吧/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="王磊">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="王磊的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">NLP 训练一个模型,太简单了吧</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-31T19:23:25+08:00">
+                2020-07-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="太简单了吧"><a href="#太简单了吧" class="headerlink" title="太简单了吧!!!"></a>太简单了吧!!!</h3><p>​        <strong>现在随着深度学习各种框架以及高阶API的封装,自己从头搭一个模型真的是成本太低了,说白了,也就是现在入门或者简单跑跑demo的门槛几乎为零,接下来就简单的聊聊两个库的使用吧</strong></p>
+<ul>
+<li><a href="https://github.com/huggingface/transformers" target="_blank" rel="noopener">transformers</a></li>
+<li><a href="https://github.com/huggingface/nlp" target="_blank" rel="noopener">nlp</a></li>
+</ul>
+<a id="more"></a>
+
+<blockquote>
+<p>对于NLPer 的同学来说, <strong><a href="https://github.com/huggingface/transformers" target="_blank" rel="noopener">transformres</a></strong> 这个包应该是在熟悉不过了,如果你还没用过这个东西,说明你已经落后啦(其实也不能这样说,应该说如果你还没fine-tuning过bert相关模型,那你就落后主流NLP技术啦)</p>
+</blockquote>
+<blockquote>
+<p><strong><a href="https://github.com/huggingface/nlp" target="_blank" rel="noopener">nlp</a></strong> 这个包其实是类似 Tensorflow Datasets 的一个东西,反正就是来对数据预处理转成tensor的一个东西</p>
+</blockquote>
+<blockquote>
+<p>废话少说, talk is cheaper, show me the code.</p>
+</blockquote>
+<h3 id="以文本分类为demo说起吧"><a href="#以文本分类为demo说起吧" class="headerlink" title="以文本分类为demo说起吧"></a>以文本分类为demo说起吧</h3><ul>
+<li><p>如果单纯的使用 transformers来做文本分类,大概是长下面这个样子的</p>
+<ol>
+<li><p>下载bert预训练文件</p>
+</li>
+<li><p>加载两个类  BertForSequenceClassification  , BertTokenizer</p>
+</li>
+<li><p>定义 optimizer</p>
+</li>
+<li><p>加载数据转到batch-tensor, 数据大概长下面这个样子(anyway, 随你自己怎么定吧)</p>
+<ul>
+<li><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">'version'</span>:<span class="string">'0.0.1'</span>,</span><br><span class="line">  <span class="string">'train'</span>:[</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">'sent'</span>:<span class="string">'我是一个句子'</span>,</span><br><span class="line">      <span class="string">'label'</span>:<span class="string">'pos'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="string">'sent'</span>:<span class="string">'我是一个句子'</span>,</span><br><span class="line">      <span class="string">'label'</span>:<span class="string">'pos'</span></span><br><span class="line">    &#125;,</span><br><span class="line">    ...</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>训练模型</p>
+</li>
+</ol>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">from</span> tqdm <span class="keyword">import</span> tqdm</span><br><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> BertForSequenceClassification,BertTokenizer,AdamW, set_seed</span><br><span class="line"></span><br><span class="line">device = <span class="string">'cuda'</span> <span class="keyword">if</span> torch.cuda.is_available() <span class="keyword">else</span> <span class="string">'cpu'</span></span><br><span class="line">pretrain_file = <span class="string">'/nfs/users/wanglei/github/BERT-NER-Pytorch-master/prev_trained_model/bert-base'</span></span><br><span class="line">model = BertForSequenceClassification.from_pretrained(pretrain_file,num_labels=<span class="number">3</span>).to(device)</span><br><span class="line">tokenizer = BertTokenizer.from_pretrained(pretrain_file)</span><br><span class="line"></span><br><span class="line">no_decay = [<span class="string">'bias'</span>, <span class="string">'LayerNorm.weight'</span>]</span><br><span class="line">optimizer_grouped_parameters = [</span><br><span class="line">    &#123;<span class="string">'params'</span>: [p <span class="keyword">for</span> n, p <span class="keyword">in</span> model.named_parameters() <span class="keyword">if</span> <span class="keyword">not</span> any(nd <span class="keyword">in</span> n <span class="keyword">for</span> nd <span class="keyword">in</span> no_decay)], <span class="string">'weight_decay'</span>: <span class="number">0.01</span>&#125;,</span><br><span class="line">    &#123;<span class="string">'params'</span>: [p <span class="keyword">for</span> n, p <span class="keyword">in</span> model.named_parameters() <span class="keyword">if</span> any(nd <span class="keyword">in</span> n <span class="keyword">for</span> nd <span class="keyword">in</span> no_decay)], <span class="string">'weight_decay'</span>: <span class="number">0.0</span>&#125;</span><br><span class="line">]</span><br><span class="line">optimizer = AdamW(optimizer_grouped_parameters, lr=<span class="number">5e-5</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">train</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">with</span> open(<span class="string">'./data/train.json'</span>) <span class="keyword">as</span> f:</span><br><span class="line">        train = json.loads(f.read())</span><br><span class="line">        D,L = [],[]</span><br><span class="line">        Dd,Ld = [],[]</span><br><span class="line">        <span class="keyword">for</span> epoch <span class="keyword">in</span> tqdm(range(<span class="number">5</span>)):</span><br><span class="line">            model.train()</span><br><span class="line">            tbar = tqdm(train[<span class="string">'train'</span>])</span><br><span class="line">            <span class="keyword">for</span> line <span class="keyword">in</span> tbar:</span><br><span class="line">                sent = line[<span class="string">'sent'</span>]</span><br><span class="line">                label = int(line[<span class="string">'label'</span>])</span><br><span class="line">                D.append(sent)</span><br><span class="line">                L.append(label)</span><br><span class="line">                <span class="keyword">if</span> len(D)%<span class="number">64</span>==<span class="number">0</span>:</span><br><span class="line">                    encoding = tokenizer(D, return_tensors=<span class="string">'pt'</span>, padding=<span class="literal">True</span>, truncation=<span class="literal">True</span>, max_length=<span class="number">50</span>)</span><br><span class="line">                    input_ids = encoding[<span class="string">'input_ids'</span>].to(device)</span><br><span class="line">                    attention_mask = encoding[<span class="string">'attention_mask'</span>].to(device)</span><br><span class="line">                    labels = torch.tensor(L).unsqueeze(<span class="number">1</span>).to(device)</span><br><span class="line">                    optimizer.zero_grad()</span><br><span class="line">                    outputs = model(input_ids, attention_mask=attention_mask, labels=labels)</span><br><span class="line">                    loss = outputs[<span class="number">0</span>]</span><br><span class="line">                    loss.backward()</span><br><span class="line">                    optimizer.step()</span><br><span class="line">                    tbar.set_description(<span class="string">'Loss is &#123;&#125;'</span>.format(loss.item()))</span><br><span class="line">                    D,L = [],[]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    set_seed(<span class="number">1234</span>)</span><br><span class="line">    train()</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>没啥废话好说的,一个文本分类任务就是这么快,不费任何脑子</p>
+</blockquote>
+<blockquote>
+<p>上面demo还是有一点烦, 需要自己构造一个batch,以及model.forward()  loss.backward() optimizer.step() 等一系列操作,那能不能不要自己弄呢,答案是,可以,看下面 </p>
+</blockquote>
+<ul>
+<li><p>如果在加上 nlp 这个数据预处理模块,那真的是更加酸爽,直接看代码吧,处理的方式大致是一样的</p>
+<ol>
+<li><p>下载bert预训练文件</p>
+</li>
+<li><p>加载两个类  BertForSequenceClassification  , BertTokenizer</p>
+</li>
+<li><p>通过 nlp 来对数据做预处理,转成batch-tensor, 数据大概就是一个json 一行存储,如下:</p>
+<ol>
+<li><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">'sent'</span><span class="string">'我是一个句子'</span>, <span class="string">'label'</span>:<span class="string">'1'</span>&#125;</span><br><span class="line">&#123;<span class="string">'sent'</span><span class="string">'我是一个句子'</span>, <span class="string">'label'</span>:<span class="string">'1'</span>&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+<li><p>定义 TrainingArguments</p>
+</li>
+<li><p>通过 Trainer 开启 训练,验证,推理等一系列操作</p>
+</li>
+</ol>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> nlp <span class="keyword">import</span> load_dataset</span><br><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> BertForSequenceClassification,Trainer, TrainingArguments</span><br><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> BertTokenizer</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score, precision_recall_fscore_support</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">device = <span class="string">'cuda'</span> <span class="keyword">if</span> torch.cuda.is_available() <span class="keyword">else</span> <span class="string">'cpu'</span></span><br><span class="line">pretrain_file = <span class="string">'/nfs/users/wanglei/github/BERT-NER-Pytorch-master/prev_trained_model/bert-base'</span></span><br><span class="line">model = BertForSequenceClassification.from_pretrained(pretrain_file, num_labels=<span class="number">3</span>).to(device)</span><br><span class="line">tokenizer = BertTokenizer.from_pretrained(pretrain_file)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">tokenize</span><span class="params">(batch)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> tokenizer(batch[<span class="string">'sent'</span>], padding=<span class="literal">True</span>, truncation=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">train_dataset, test_dataset = load_dataset(<span class="string">'json'</span>, data_files=&#123;<span class="string">'train'</span>: <span class="string">'/nfs/users/wanglei/transformers/nlp/data/train.json'</span>,</span><br><span class="line">                                              <span class="string">'test'</span>: <span class="string">'/nfs/users/wanglei/transformers/nlp/data/dev.json'</span>&#125;,</span><br><span class="line">                                              split=[<span class="string">'train'</span>, <span class="string">'test'</span>])</span><br><span class="line"><span class="comment"># 分词</span></span><br><span class="line">train_dataset = train_dataset.map(tokenize, batched=<span class="literal">True</span>, batch_size=len(train_dataset))</span><br><span class="line">test_dataset = test_dataset.map(tokenize, batched=<span class="literal">True</span>, batch_size=len(test_dataset))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 标签转整形</span></span><br><span class="line">train_dataset = train_dataset.map(<span class="keyword">lambda</span> examples: &#123;<span class="string">'labels'</span>: [int(_) <span class="keyword">for</span> _ <span class="keyword">in</span> examples[<span class="string">'label'</span>]]&#125;, batched=<span class="literal">True</span>)</span><br><span class="line">test_dataset = test_dataset.map(<span class="keyword">lambda</span> examples: &#123;<span class="string">'labels'</span>: [int(_) <span class="keyword">for</span> _ <span class="keyword">in</span> examples[<span class="string">'label'</span>]]&#125;, batched=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 返回pytorch 的数据格式</span></span><br><span class="line">train_dataset.set_format(<span class="string">'torch'</span>, columns=[<span class="string">'input_ids'</span>, <span class="string">'attention_mask'</span>, <span class="string">'labels'</span>])</span><br><span class="line">test_dataset.set_format(<span class="string">'torch'</span>, columns=[<span class="string">'input_ids'</span>, <span class="string">'attention_mask'</span>, <span class="string">'labels'</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用loader的方式也是可以的,自己loss.backward() optimizer.step() 等操作吧</span></span><br><span class="line"><span class="comment"># dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=32)</span></span><br><span class="line"></span><br><span class="line">training_args = TrainingArguments(</span><br><span class="line">    output_dir=<span class="string">'./results'</span>,</span><br><span class="line">    num_train_epochs=<span class="number">1</span>,</span><br><span class="line">    per_device_train_batch_size=<span class="number">4</span>,</span><br><span class="line">    per_device_eval_batch_size=<span class="number">4</span>,</span><br><span class="line">    warmup_steps=<span class="number">500</span>,</span><br><span class="line">    weight_decay=<span class="number">0.01</span>,</span><br><span class="line">    evaluate_during_training=<span class="literal">True</span>,</span><br><span class="line">    logging_dir=<span class="string">'./logs'</span>,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">trainer = Trainer(</span><br><span class="line">    model=model,</span><br><span class="line">    args=training_args,</span><br><span class="line">    train_dataset=train_dataset,</span><br><span class="line">    eval_dataset=test_dataset</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">trainer.train()</span><br><span class="line"></span><br><span class="line">trainer.evaluate()</span><br></pre></td></tr></table></figure>
+
+<p><strong>就是这么简单 !!!!!!!</strong></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/NLP/" rel="tag"># NLP</a>
+          
+            <a href="/tags/huggingface/" rel="tag"># huggingface</a>
+          
+            <a href="/tags/transformer/" rel="tag"># transformer</a>
+          
+            <a href="/tags/训练模型/" rel="tag"># 训练模型</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/03/seq2seq-Pointer-Network-Copy-等技术梳理/" rel="next" title="seq2seq Pointer-Network Copy 等技术梳理">
+                <i class="fa fa-chevron-left"></i> seq2seq Pointer-Network Copy 等技术梳理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/07/31/tf-serving-模型部署以及keras模型转换成serving可用的方式/" rel="prev" title="tf-serving 模型部署以及keras模型转换成serving可用的方式">
+                tf-serving 模型部署以及keras模型转换成serving可用的方式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">王磊</p>
+              <p class="site-description motion-element" itemprop="description">浙江理工大学19级，就职于杭州艾耕科技，从事NLP相关工作。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">27</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#太简单了吧"><span class="nav-number">1.</span> <span class="nav-text">太简单了吧!!!</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#以文本分类为demo说起吧"><span class="nav-number">2.</span> <span class="nav-text">以文本分类为demo说起吧</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王磊</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
