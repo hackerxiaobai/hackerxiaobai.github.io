@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/NLP.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/NLP.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="sort,cut,wc,uniq,sed,awk,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="和计算机打交道，总避免不了和文件操作，简单的文件操作比如 排序、查找、去重等，涉及到这些操作总不能打开文件一行一行的自己手动去操作吧，但是又不想为了处理这些文件写一些脚本代码，那么此时，就可以借助 Linux 内建的 一些命令来处理啦。该篇文章也是一个简单记录总结，供后续自己查看">
+<meta name="keywords" content="sort,cut,wc,uniq,sed,awk">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 文件和字符流处理命令总结">
+<meta property="og:url" content="http://yoursite.com/2020/09/15/Linux-文件和字符流处理命令总结/index.html">
+<meta property="og:site_name" content="王磊的博客">
+<meta property="og:description" content="和计算机打交道，总避免不了和文件操作，简单的文件操作比如 排序、查找、去重等，涉及到这些操作总不能打开文件一行一行的自己手动去操作吧，但是又不想为了处理这些文件写一些脚本代码，那么此时，就可以借助 Linux 内建的 一些命令来处理啦。该篇文章也是一个简单记录总结，供后续自己查看">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-09-15T11:35:42.513Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux 文件和字符流处理命令总结">
+<meta name="twitter:description" content="和计算机打交道，总避免不了和文件操作，简单的文件操作比如 排序、查找、去重等，涉及到这些操作总不能打开文件一行一行的自己手动去操作吧，但是又不想为了处理这些文件写一些脚本代码，那么此时，就可以借助 Linux 内建的 一些命令来处理啦。该篇文章也是一个简单记录总结，供后续自己查看">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/09/15/Linux-文件和字符流处理命令总结/">
+
+
+
+
+
+  <title>Linux 文件和字符流处理命令总结 | 王磊的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">王磊的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">凡所有相，皆是虚妄</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-github">
+          <a href="https://github.com/hackerxiaobai" rel="section">
+            
+            github
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/09/15/Linux-文件和字符流处理命令总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="王磊">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="王磊的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux 文件和字符流处理命令总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-09-15T13:46:27+08:00">
+                2020-09-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>和计算机打交道，总避免不了和文件操作，简单的文件操作比如 排序、查找、去重等，涉及到这些操作总不能打开文件一行一行的自己手动去操作吧，但是又不想为了处理这些文件写一些脚本代码，那么此时，就可以借助 Linux 内建的 一些命令来处理啦。该篇文章也是一个简单记录总结，供后续自己查看</p>
+</blockquote>
+<a id="more"></a>
+
+<h3 id="sort-cut-uniq-wc-四条命令简单记录"><a href="#sort-cut-uniq-wc-四条命令简单记录" class="headerlink" title="sort  cut  uniq   wc 四条命令简单记录"></a>sort  cut  uniq   wc 四条命令简单记录</h3><h3 id="sort"><a href="#sort" class="headerlink" title="sort"></a>sort</h3><ul>
+<li>sort<ul>
+<li>sort 命令对 File 参数指定的文件中的行排序，并将结果写到标准输出。如果 File 参数指定多个文件，那么 sort 命令将这些文件连接起来，并当作一个文件进行排序。</li>
+</ul>
+</li>
+<li>sort 语法<ul>
+<li>sort [-fbMnrtuk] [file or stdin]</li>
+<li>选项与参数：<br>-f  ：忽略大小写的差异，例如 A 与 a 视为编码相同；<br>-b  ：忽略最前面的空格符部分；<br>-M  ：以月份的名字来排序，例如 JAN, DEC 等等的排序方法；<br>-n  ：使用『纯数字』进行排序(默认是以文字型态来排序的)；<br>-r  ：反向排序；<br>-u  ：就是 uniq ，相同的数据中，仅出现一行代表；<br>-t  ：分隔符，默认是用 [tab] 键来分隔；<br>-k  ：以那个区间 (field) 来进行排序的意思</li>
+</ul>
+</li>
+<li>例子<ul>
+<li>cat /etc/passwd | sort<ul>
+<li>sort 是默认以第一个数据来排序，而且默认是以字符串形式来排序,所以由字母 a 开始升序排序。</li>
+</ul>
+</li>
+<li>cat /etc/passwd | sort -t ‘:’ -k 3<ul>
+<li>以 : 来分隔的，以第三栏来排序</li>
+<li>默认是以字符串来排序的，如果想要使用数字排序： cat /etc/passwd | sort -t ‘:’ -k 3n</li>
+<li>cat /etc/passwd | sort -t ‘:’ -k 3nr    r（倒序）</li>
+</ul>
+</li>
+<li>cat /etc/passwd |  sort -t’:’ -k 6.2,6.4 -k 1r <ul>
+<li>以第六个域的第2个字符到第4个字符进行正向排序，再基于第一个域进行反向排序</li>
+</ul>
+</li>
+<li>cat /etc/passwd |  sort -t’:’ -k 7 -u<ul>
+<li>查看/etc/passwd有多少个shell:对/etc/passwd的第七个域进行排序，然后去重</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="uniq"><a href="#uniq" class="headerlink" title="uniq"></a>uniq</h3><ul>
+<li>uniq<ul>
+<li>uniq命令可以去除排序过的文件中的重复行，因此uniq经常和sort合用。也就是说，为了使uniq起作用，所有的重复行必须是相邻的。</li>
+</ul>
+</li>
+<li>uniq 语法<ul>
+<li>选项与参数：<br>-i   ：忽略大小写字符的不同；<br>-c  ：进行计数<br>-u  ：只显示唯一的行</li>
+</ul>
+</li>
+<li>假设testfile的内容如下<ul>
+<li>hello<br>world<br>friend<br>hello<br>world<br>hello</li>
+</ul>
+</li>
+<li>直接删除未经排序的文件，将会发现没有任何行被删除<ul>
+<li>uniq testfile  输出如下，没有任何改变</li>
+<li>hello<br>world<br>friend<br>hello<br>world<br>hello</li>
+</ul>
+</li>
+<li>排序文件，默认是去重<ul>
+<li>cat testfile | sort |uniq</li>
+<li>输出</li>
+<li>friend<br>hello<br>world</li>
+</ul>
+</li>
+<li>排序之后删除了重复行，同时在行首位置输出该行重复的次数<ul>
+<li>sort testfile | uniq -c</li>
+<li>输出</li>
+<li>1 friend<br>3 hello<br>2 world</li>
+</ul>
+</li>
+<li>仅显示存在重复的行，并在行首显示该行重复的次数<ul>
+<li>sort testfile | uniq -dc</li>
+<li>输出</li>
+<li>3 hello<br>2 world</li>
+</ul>
+</li>
+<li>仅显示不重复的行<ul>
+<li>sort testfile | uniq -u</li>
+<li>输出 friend  </li>
+</ul>
+</li>
+</ul>
+<h3 id="cut"><a href="#cut" class="headerlink" title="cut"></a>cut</h3><ul>
+<li>cut<ul>
+<li>cut命令可以从一个文本文件或者文本流中提取文本列。</li>
+</ul>
+</li>
+<li>cut语法<ul>
+<li>选项与参数：<br>-d  ：后面接分隔字符。与 -f 一起使用；<br>-f  ：依据 -d 的分隔字符将一段信息分割成为数段，用 -f 取出第几段的意思；<br>-c  ：以字符 (characters) 的单位取出固定字符区间；</li>
+</ul>
+</li>
+<li>将 PATH 变量取出，我要找出第五个路径。<ul>
+<li>echo $PATH | cut -d ‘:’ -f 5</li>
+</ul>
+</li>
+<li>将 PATH 变量取出，我要找出第三和第五个路径。<ul>
+<li>echo $PATH | cut -d ‘:’ -f 3,5</li>
+</ul>
+</li>
+<li>将 PATH 变量取出，我要找出第三到最后一个路径。<ul>
+<li>echo $PATH | cut -d ‘:’ -f 3-</li>
+</ul>
+</li>
+<li>将 PATH 变量取出，我要找出第一到第三个路径。<ul>
+<li>echo $PATH | cut -d ‘:’ -f 1-3</li>
+</ul>
+</li>
+<li>将 PATH 变量取出，我要找出第一到第三，还有第五个路径。<ul>
+<li>echo $PATH | cut -d ‘:’ -f 1-3,5</li>
+</ul>
+</li>
+<li>实用例子:只显示/etc/passwd的用户和shell<ul>
+<li>cat /etc/passwd | cut -d ‘:’ -f 1,7</li>
+</ul>
+</li>
+</ul>
+<h3 id="wc"><a href="#wc" class="headerlink" title="wc"></a>wc</h3><ul>
+<li>wc<ul>
+<li>统计文件里面有多少单词，多少行，多少字符。</li>
+</ul>
+</li>
+<li>语法<ul>
+<li>选项与参数：<br>-l  ：仅列出行；<br>-w  ：仅列出多少字(英文单字)；<br>-m  ：多少字符；</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/sort/" rel="tag"># sort</a>
+          
+            <a href="/tags/cut/" rel="tag"># cut</a>
+          
+            <a href="/tags/wc/" rel="tag"># wc</a>
+          
+            <a href="/tags/uniq/" rel="tag"># uniq</a>
+          
+            <a href="/tags/sed/" rel="tag"># sed</a>
+          
+            <a href="/tags/awk/" rel="tag"># awk</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/09/09/python-实现十大排序算法/" rel="next" title="python 实现十大排序算法">
+                <i class="fa fa-chevron-left"></i> python 实现十大排序算法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">王磊</p>
+              <p class="site-description motion-element" itemprop="description">浙江理工大学19级，就职于杭州艾耕科技，从事NLP相关工作。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#sort-cut-uniq-wc-四条命令简单记录"><span class="nav-number">1.</span> <span class="nav-text">sort  cut  uniq   wc 四条命令简单记录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sort"><span class="nav-number">2.</span> <span class="nav-text">sort</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#uniq"><span class="nav-number">3.</span> <span class="nav-text">uniq</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cut"><span class="nav-number">4.</span> <span class="nav-text">cut</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#wc"><span class="nav-number">5.</span> <span class="nav-text">wc</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王磊</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
