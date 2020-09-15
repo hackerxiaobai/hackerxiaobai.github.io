@@ -47,7 +47,7 @@ def insertSort(nums):
     """
     for i in range(1, len(nums)):
         curNum, preIndex = nums[i], i
-        while preIndex >= 0 and curNum < nums[preIndex - 1]:
+        while preIndex > 0 and curNum < nums[preIndex - 1]:
             nums[preIndex] = nums[preIndex - 1]
             preIndex -= 1
         nums[preIndex] = curNum
