@@ -173,6 +173,8 @@ tags:
 
 [说明文档连接](http://www.gnu.org/software/gawk/manual/gawk.html)
 
+[软一峰扫盲](https://www.ruanyifeng.com/blog/2018/11/awk.html)
+
 + awk
 
   + awk是一个强大的文本分析工具，相对于grep的查找，sed的编辑，awk在其对数据分析并生成报告时，显得尤为强大。简单来说awk就是把文件逐行的读入，以空格为默认分隔符将每行切片，切开的部分再进行各种分析处理。

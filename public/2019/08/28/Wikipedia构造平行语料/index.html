@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/NLP.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/NLP.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Wikipieda,平行语料,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="参考论文 Learning To Split and Rephrase From Wikipedia Edit History">
+<meta name="keywords" content="Wikipieda,平行语料">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Wikipedia构造平行语料">
+<meta property="og:url" content="http://yoursite.com/2019/08/28/Wikipedia构造平行语料/index.html">
+<meta property="og:site_name" content="王磊的博客">
+<meta property="og:description" content="参考论文 Learning To Split and Rephrase From Wikipedia Edit History">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-08-28T09:22:46.071Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Wikipedia构造平行语料">
+<meta name="twitter:description" content="参考论文 Learning To Split and Rephrase From Wikipedia Edit History">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/08/28/Wikipedia构造平行语料/">
+
+
+
+
+
+  <title>Wikipedia构造平行语料 | 王磊的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">王磊的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">凡所有相，皆是虚妄</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-github">
+          <a href="https://github.com/hackerxiaobai" rel="section">
+            
+            github
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/28/Wikipedia构造平行语料/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="王磊">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="王磊的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Wikipedia构造平行语料</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-08-28T17:06:42+08:00">
+                2019-08-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>参考论文 <a href="https://arxiv.org/abs/1808.09468" target="_blank" rel="noopener">Learning To Split and Rephrase From Wikipedia Edit History</a></p>
+</blockquote>
+<a id="more"></a>
+<blockquote>
+<p>该论文主要分析的是如何通过维基百科的编辑历史文件一步步产生高质量的英文版平行语料库,论文中的方法主要是四步</p>
+<ol>
+<li>To construct the WikiSplit corpus, we identify edits that involve sentences being split. A list of sentences for each snapshot is obtained by stripping HTML tags and Wikipedia markup and running a sentence break detector.<ul>
+<li>首先筛选出需要被分割的候选句子，根据xml文件中的时间快照字段以及维基百科本身的标记将其拆分成一些句子列表，然后用论文中给出的分句检测器工具将其拆成一个个句子。</li>
+</ul>
+</li>
+<li>Temporally adjacent snapshots of a Wikipedia page are then compared to check for sentences that have undergone a split like that shown in Figure 1.<ul>
+<li>然后通过维基百科提供的每个页面相邻的时间快照来对比核查该句子是否经历了正确的分割，其实论文图1中指的就是增加一些字段和删除一些字段。</li>
+</ul>
+</li>
+<li>To extract a full sentence C and its candidate split into S = (S1,S2),we require that C and S1 have the same trigram prefix, C and S2 have the same trigram suffix, and S1 and S2 have different trigram suffixes. To filter out misaligned pairs, we use BLEU scores (Papineni et al., 2002) to ensure similarity between the original and the split versions.<br>we discard pairs where BLEU(C,S1) or BLEU(C, S2) is less than δ (an empirically chosen threshold). If multiple candidates remain for a given sentence C, we retain argmaxS (BLEU(C, S1 ) + BLEU(C, S2 )).<ul>
+<li>为了保证源语句和被拆分成的两个子句之间达到一定的相似度，论文里的要求是保证C和S1的trigram 前缀相同，和S2的trigram 后缀相同，S1和S2的trigram后缀不同，还用到了BLEU指标来评定两个句子间的相似度，主要是设定阈值的方式来筛选的。</li>
+</ul>
+</li>
+<li>Our extraction heuristic is imperfect, so we manually assess corpus quality using the same categorization schema proposed by Aharoni and Goldberg.<ul>
+<li>这一步主要是人为的操作来评定句子的质量。</li>
+</ul>
+</li>
+</ol>
+</blockquote>
+<h3 id="严格按照论文在英文数据复现得到的结果如下"><a href="#严格按照论文在英文数据复现得到的结果如下" class="headerlink" title="严格按照论文在英文数据复现得到的结果如下"></a>严格按照论文在英文数据复现得到的结果如下</h3><blockquote>
+<p>A surge of popular interest in anarchism occurred during the [[1970’s]] in [[Britain]] following the birth of the [[punk rock]] movement.<br>A surge of popular interest in anarchism occurred during the [[1960’s]] and [[1970’s]].<br>In [[Britain]] following the birth of the [[punk rock]] movement.</p>
+</blockquote>
+<h3 id="主要目的是想构造中文的平行语料-得到结果如下"><a href="#主要目的是想构造中文的平行语料-得到结果如下" class="headerlink" title="主要目的是想构造中文的平行语料,得到结果如下"></a>主要目的是想构造中文的平行语料,得到结果如下</h3><blockquote>
+<p>诗是 历史 最 悠久 的 文学 形式 ， 中国 是 世界 上 诗歌 最 发达 的 国度 之一 。<br>诗是 历史 最 悠久 的 文学 形式 之一 ， 例如 荷马史诗 。<br>中国 是 世界 上 诗歌 最 发达 的 国度 之一 。</p>
+</blockquote>
+<blockquote>
+<p>从事 定性分析 的 部分 社会学家 相信 这是 一种 更好 的 方法 ， 他们 认为 ， 这是 一种 可以 有助于 我们 对 一个 “ 离散 ” 性 的 社会 和 独特性 的 人文 的 了解 ， 这种 方法 从不 寻求 有 一致 观点 ， 但 它们 却 可以 互相 欣赏 各自 所 采取 的 独特 方式 并 互相 借鉴 。<br>从事 定性分析 的 社会学家 相信 ， 这是 一种 更好 的 方法 ， 因为 这 可以 加强 理解 “ 离散 ” 性 的 社会 和 独特性 的 人文 。<br>这种 方法 从不 寻求 有 一致 观点 ， 但 却 可以 互相 欣赏 各自 所 采取 的 独特 方式 并 互相 借鉴 。</p>
+</blockquote>
+<blockquote>
+<p>十月 殿试 ， 乾隆帝 亲 往 紫光阁 校阅 ， 见到 马全 ， 发现 相识 ， 问道 ： 「 尔马 瑔 耶 ？<br>十月 殿试 ， 乾隆帝 亲 往 紫光阁 校阅 。<br>马全 脱颖而出 ， 乾隆帝 竟 将 其 认出 ， 问道 ： 「 尔马 瑔 耶 ？</p>
+</blockquote>
+<blockquote>
+<p>洪武 年间 ， 明朝 大军 进攻 云南 ， 改平 缅为麓 川平 缅 军民 宣慰司 ， 才 首次 使用 “ 麓 川 ” 。<br>洪武 年间 ， 明朝 大军 进攻 云南 ， 其 国君 思伦发 归顺 明朝 ， 授麓 川 宣慰 使 。<br>改平 缅为麓 川平 缅 军民 宣慰司 ， 才 首次 使用 “ 麓 川 ” 。</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Wikipieda/" rel="tag"># Wikipieda</a>
+          
+            <a href="/tags/平行语料/" rel="tag"># 平行语料</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/28/Cython与Spacy加速NLP项目/" rel="next" title="Cython与Spacy加速NLP项目">
+                <i class="fa fa-chevron-left"></i> Cython与Spacy加速NLP项目
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/02/Prometheus监控告警/" rel="prev" title="Prometheus监控告警">
+                Prometheus监控告警 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">王磊</p>
+              <p class="site-description motion-element" itemprop="description">浙江理工大学19级，就职于杭州艾耕科技，从事NLP相关工作。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#严格按照论文在英文数据复现得到的结果如下"><span class="nav-number">1.</span> <span class="nav-text">严格按照论文在英文数据复现得到的结果如下</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主要目的是想构造中文的平行语料-得到结果如下"><span class="nav-number">2.</span> <span class="nav-text">主要目的是想构造中文的平行语料,得到结果如下</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王磊</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
