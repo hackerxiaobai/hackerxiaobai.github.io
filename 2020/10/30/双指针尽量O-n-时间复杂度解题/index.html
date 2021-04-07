@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/NLP.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/NLP.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="双指针,O(n)时间复杂度,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="双指针相关解释 双指针个人从遇到的一些题目上来看，一般包括两类 快慢指针（比如解决链表中是否包含环） 左右指针（主要解决数组或字符串的问题）">
+<meta name="keywords" content="双指针,O(n)时间复杂度">
+<meta property="og:type" content="article">
+<meta property="og:title" content="双指针尽量O(n)时间复杂度解题">
+<meta property="og:url" content="http://yoursite.com/2020/10/30/双指针尽量O-n-时间复杂度解题/index.html">
+<meta property="og:site_name" content="王磊的博客">
+<meta property="og:description" content="双指针相关解释 双指针个人从遇到的一些题目上来看，一般包括两类 快慢指针（比如解决链表中是否包含环） 左右指针（主要解决数组或字符串的问题）">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-11-04T14:18:36.063Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="双指针尽量O(n)时间复杂度解题">
+<meta name="twitter:description" content="双指针相关解释 双指针个人从遇到的一些题目上来看，一般包括两类 快慢指针（比如解决链表中是否包含环） 左右指针（主要解决数组或字符串的问题）">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"hide","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/10/30/双指针尽量O-n-时间复杂度解题/">
+
+
+
+
+
+  <title>双指针尽量O(n)时间复杂度解题 | 王磊的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">王磊的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">凡所有相，皆是虚妄</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-github">
+          <a href="https://github.com/hackerxiaobai" rel="section">
+            
+            github
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/10/30/双指针尽量O-n-时间复杂度解题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="王磊">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="王磊的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">双指针尽量O(n)时间复杂度解题</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-10-30T21:16:56+08:00">
+                2020-10-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="双指针相关解释"><a href="#双指针相关解释" class="headerlink" title="双指针相关解释"></a>双指针相关解释</h3><ul>
+<li>双指针个人从遇到的一些题目上来看，一般包括两类<ul>
+<li>快慢指针（比如解决链表中是否包含环）</li>
+<li>左右指针（主要解决数组或字符串的问题）</li>
+</ul>
+</li>
+</ul>
+<a id="more"></a>
+
+<h4 id="快慢指针"><a href="#快慢指针" class="headerlink" title="快慢指针"></a>快慢指针</h4><blockquote>
+<p>快慢指针一般都初始化指向链表的头结点 head，前进时快指针 fast 在前，慢指针 slow 在后，巧妙解决一些链表中的问题。</p>
+</blockquote>
+<ul>
+<li><p>判定链表中是否含有环</p>
+<ul>
+<li><p>单链表一般都是只有next指针指向下一个节点，定义如下：</p>
+</li>
+<li><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Node</span><span class="params">(object)</span>:</span></span><br><span class="line">  	<span class="function"><span class="keyword">def</span> <span class="title">__inti__</span><span class="params">(self, value)</span>:</span></span><br><span class="line">    		self.value = value</span><br><span class="line">    		self.next = <span class="literal">None</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>一般不包含环的链表遍历一遍都是以遇到None为结束</p>
+</li>
+<li><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Process</span><span class="params">(object)</span>:</span></span><br><span class="line">  	<span class="function"><span class="keyword">def</span> <span class="title">solve</span><span class="params">(self, node)</span>:</span></span><br><span class="line">    		<span class="keyword">while</span>(node):</span><br><span class="line">      		node = node.next</span><br><span class="line">    		<span class="keyword">return</span> <span class="string">'没有环，不会进入死循环'</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>若链表中有环则会一直死循环，此时，用两个指针，fast指针和slow指针，若有环，fast指针肯定会追上slow指针，如下</p>
+</li>
+<li><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Process</span><span class="params">(object)</span>:</span></span><br><span class="line">  	<span class="function"><span class="keyword">def</span> <span class="title">solve</span><span class="params">(self, node)</span>:</span></span><br><span class="line">      	fast = slow = node</span><br><span class="line">        <span class="keyword">while</span>(fast!=<span class="literal">None</span> <span class="keyword">and</span> fast.next!=<span class="literal">None</span>):</span><br><span class="line">          	fast = fast.next.next</span><br><span class="line">            slow = slow.next</span><br><span class="line">            <span class="keyword">if</span> fast==slow:</span><br><span class="line">              	<span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>以知链表有环，找到该环的起始节点</p>
+<ul>
+<li><p>仍然以快慢指针为例，先让它两第一次相遇，此时假设slow 走了 k 步，则 fast一定走了 2k 步，若相遇，则肯定是在环上相遇，假设从相遇点回退到环的起点为 m 步，则 k-m 的距离就是链表的起点到环的起点的距离，而我们知道 fast 是比 slow 多走了k步，多走的这k步肯定是绕环走出来的，且肯定刚好是环的n倍，又知道从相遇点回退到环的起点为 m 步，则若从相遇点继续走k-m步，不是刚好到环的起点吗</p>
+</li>
+<li><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Process</span><span class="params">(object)</span>:</span></span><br><span class="line">  	<span class="function"><span class="keyword">def</span> <span class="title">solve</span><span class="params">(self, node)</span>:</span></span><br><span class="line">      	fast = slow = node</span><br><span class="line">        <span class="keyword">while</span>(fast!=<span class="literal">None</span> <span class="keyword">and</span> fast.next!=<span class="literal">None</span>):</span><br><span class="line">          	fast = fast.next.next</span><br><span class="line">            slow = slow.next</span><br><span class="line">            <span class="keyword">if</span> fast==slow:</span><br><span class="line">              	<span class="keyword">break</span></span><br><span class="line">        slow = node</span><br><span class="line">        <span class="keyword">while</span>(slow!=fast):</span><br><span class="line">          	slow = slow.next</span><br><span class="line">            fast = fast.next</span><br><span class="line">        <span class="keyword">return</span> slow</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>查找链表的中间节点</p>
+<ul>
+<li><p>仍然以快慢节点为例，从上题我们就知道，若fast 和 slow 相遇，则 fast一定比slow 多走k步，所以，如果fast走到尾节点，此时slow不就刚好比fast 少走一半吗？</p>
+</li>
+<li><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Process</span><span class="params">(object)</span>:</span></span><br><span class="line">  	<span class="function"><span class="keyword">def</span> <span class="title">solve</span><span class="params">(self, node)</span>:</span></span><br><span class="line">      	fast = slow = node</span><br><span class="line">        <span class="keyword">while</span>(fast!=<span class="literal">None</span>):</span><br><span class="line">          	fast = fast.next.next</span><br><span class="line">            slow = slow.next</span><br><span class="line">        <span class="keyword">return</span> slow</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>查找链表的倒数第k个节点</p>
+<ul>
+<li><p>还是双指针，可以让第一个指针先走k步，然后让两个指针同步走，当第一个指针到尾节点时，另一个指针就刚好是倒数第k个</p>
+</li>
+<li><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Process</span><span class="params">(object)</span>:</span></span><br><span class="line">  	<span class="function"><span class="keyword">def</span> <span class="title">solve</span><span class="params">(self, node, k)</span>:</span></span><br><span class="line">      	fast = slow = node</span><br><span class="line">        <span class="keyword">while</span>(k&gt;<span class="number">0</span>):</span><br><span class="line">          	fast = fast.next</span><br><span class="line">            k -= <span class="number">1</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">while</span>(fast!=<span class="literal">None</span>):</span><br><span class="line">          	fast = fast.next</span><br><span class="line">            slow = slow.next</span><br><span class="line">        <span class="keyword">return</span> slow</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="左右指针"><a href="#左右指针" class="headerlink" title="左右指针"></a>左右指针</h4><blockquote>
+<p>左右指针在数组中实际是指两个索引值，一般初始化为 left = 0, right = nums.length - 1 。</p>
+</blockquote>
+<ul>
+<li><p>最常见一般是二分查找算法的实现，常见代码如下：</p>
+<ul>
+<li><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BinarySearch</span><span class="params">(object)</span>:</span></span><br><span class="line">  	<span class="function"><span class="keyword">def</span> <span class="title">solve</span><span class="params">(self, nums, target)</span>:</span></span><br><span class="line">      	left,right = <span class="number">0</span>,len(nums)<span class="number">-1</span></span><br><span class="line">        <span class="keyword">while</span>(left&lt;=right):</span><br><span class="line">          	middle = (left+right)//<span class="number">2</span></span><br><span class="line">            <span class="keyword">if</span> nums[middle]==target:</span><br><span class="line">              	<span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">            <span class="keyword">elif</span> nums[middle]&lt;target:</span><br><span class="line">              	left = middle+<span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">              	right = middle<span class="number">-1</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>升序列表中找两个数之和等于给定的目标值</p>
+<ul>
+<li><p>给出生序列表肯定是有它的意义的，如果头尾两数相加小于target，则我们知道，肯定是头节点往后，如果大于target，肯定是尾节点往前，</p>
+</li>
+<li><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Process</span><span class="params">(object)</span>:</span></span><br><span class="line">  	<span class="function"><span class="keyword">def</span> <span class="title">solve</span><span class="params">(self, nums, target)</span>:</span></span><br><span class="line">      	left,right = <span class="number">0</span>,len(nums)<span class="number">-1</span></span><br><span class="line">        <span class="keyword">while</span>(left&lt;=right):</span><br><span class="line">          	sum = nums[left]+nums[right]</span><br><span class="line">            <span class="keyword">if</span> sum&lt;target:</span><br><span class="line">              	left += <span class="number">1</span></span><br><span class="line">            <span class="keyword">elif</span> sum&gt;target:</span><br><span class="line">              	right -= <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">              <span class="keyword">return</span> [left, right]</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>给定一个数，判定该数是否可以表示成两个数的平方和</p>
+<ul>
+<li><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Process</span><span class="params">(object)</span>:</span></span><br><span class="line">  	<span class="function"><span class="keyword">def</span> <span class="title">solve</span><span class="params">(self, num)</span>:</span></span><br><span class="line">      	left,right = <span class="number">0</span>, int(num**<span class="number">0.5</span>)</span><br><span class="line">        <span class="keyword">while</span>(left&lt;right):</span><br><span class="line">          	sum = left**<span class="number">2</span> + right**<span class="number">2</span></span><br><span class="line">            <span class="keyword">if</span> sum&lt;target:</span><br><span class="line">              	left += <span class="number">1</span></span><br><span class="line">            <span class="keyword">elif</span> sum&gt;target:</span><br><span class="line">              	right -= <span class="number">1</span></span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">              <span class="keyword">return</span> [left, right]</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>回文字符串，可以删除一个字符串，在判定是否可以构成回文字符串</p>
+<ul>
+<li><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Process</span><span class="params">(object)</span>:</span></span><br><span class="line">  	<span class="function"><span class="keyword">def</span> <span class="title">solve</span><span class="params">(self, s)</span>:</span></span><br><span class="line">      	left,right = <span class="number">0</span>, len(s)<span class="number">-1</span></span><br><span class="line">        <span class="keyword">while</span>(left&lt;right):</span><br><span class="line">          	<span class="keyword">if</span> s[left]!=s[right]:</span><br><span class="line">              	<span class="keyword">return</span> helper(s, left+<span class="number">1</span>, right) | helper(s, left, right<span class="number">-1</span>)</span><br><span class="line">            left += <span class="number">1</span></span><br><span class="line">            right -= <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">      </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">helper</span><span class="params">(self, s, left, right)</span>:</span></span><br><span class="line">      	<span class="keyword">while</span>(left&lt;right):</span><br><span class="line">          	<span class="keyword">if</span> s[left]!=s[right]:</span><br><span class="line">              	<span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">            left += <span class="number">1</span></span><br><span class="line">            right -= <span class="number">1</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/双指针/" rel="tag"># 双指针</a>
+          
+            <a href="/tags/O-n-时间复杂度/" rel="tag"># O(n)时间复杂度</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/09/28/Java-读取超大Json文件性能如何保证？/" rel="next" title="Java 读取超大Json文件性能如何保证？">
+                <i class="fa fa-chevron-left"></i> Java 读取超大Json文件性能如何保证？
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/04/02/Docker基本使用-一/" rel="prev" title="Docker基本使用(一)">
+                Docker基本使用(一) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">王磊</p>
+              <p class="site-description motion-element" itemprop="description">浙江理工大学19级，就职于杭州艾耕科技，从事NLP相关工作。</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">50</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#双指针相关解释"><span class="nav-number">1.</span> <span class="nav-text">双指针相关解释</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#快慢指针"><span class="nav-number">1.1.</span> <span class="nav-text">快慢指针</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#左右指针"><span class="nav-number">1.2.</span> <span class="nav-text">左右指针</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王磊</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
