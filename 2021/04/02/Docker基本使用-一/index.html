@@ -90,7 +90,13 @@
 <meta property="og:image" content="http://yoursite.com/2021/04/02/Docker基本使用-一/1.png">
 <meta property="og:image" content="http://yoursite.com/2021/04/02/Docker基本使用-一/2.png">
 <meta property="og:image" content="http://yoursite.com/2021/04/02/Docker基本使用-一/3.png">
-<meta property="og:updated_time" content="2021-04-07T10:10:15.269Z">
+<meta property="og:image" content="http://yoursite.com/2021/04/02/Docker基本使用-一/4.png">
+<meta property="og:image" content="http://yoursite.com/2021/04/02/Docker基本使用-一/5.png">
+<meta property="og:image" content="http://yoursite.com/2021/04/02/Docker基本使用-一/6.png">
+<meta property="og:image" content="http://yoursite.com/2021/04/02/Docker基本使用-一/6.png">
+<meta property="og:image" content="http://yoursite.com/2021/04/02/Docker基本使用-一/7.png">
+<meta property="og:image" content="http://yoursite.com/2021/04/02/Docker基本使用-一/8.png">
+<meta property="og:updated_time" content="2021-04-08T09:36:04.979Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker基本使用(一)">
 <meta name="twitter:description" content="内容安排 Docker基础 Docker镜像讲解 容器数据卷 什么是DockerFile 发布镜像 Docker网络讲解 实战:部署一个Redis集群  Docker基础Docker 是什么 一种容器化技术，问度娘吧  为什么会出现Docker这个东西​        我们可以想象一下，之前比如开发一个web，从开发到上线，从操作系统，到运行环境，再到应用配置。作为开发+运维之间的协作我们需要 关">
@@ -446,7 +452,133 @@
 <h3 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h3><blockquote>
 <p>会使用上述命令其实连入门都算不上。</p>
 </blockquote>
-<h2 id="Docker镜像讲解"><a href="#Docker镜像讲解" class="headerlink" title="Docker镜像讲解"></a>Docker镜像讲解</h2><h2 id="容器数据卷"><a href="#容器数据卷" class="headerlink" title="容器数据卷"></a><strong>容器数据卷</strong></h2><h2 id="什么是DockerFile"><a href="#什么是DockerFile" class="headerlink" title="什么是DockerFile"></a><strong>什么是DockerFile</strong></h2><h2 id="发布镜像"><a href="#发布镜像" class="headerlink" title="发布镜像"></a><strong>发布镜像</strong></h2><h2 id="Docker网络讲解"><a href="#Docker网络讲解" class="headerlink" title="Docker网络讲解"></a><strong>Docker网络讲解</strong></h2><h2 id="实战-部署一个Redis集群"><a href="#实战-部署一个Redis集群" class="headerlink" title="实战:部署一个Redis集群"></a><strong>实战:部署一个Redis集群</strong></h2>
+<h2 id="Docker镜像讲解"><a href="#Docker镜像讲解" class="headerlink" title="Docker镜像讲解"></a>Docker镜像讲解</h2><h3 id="镜像是什么"><a href="#镜像是什么" class="headerlink" title="镜像是什么"></a><strong>镜像是什么</strong></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">镜像是一种轻量级、可执行的独立软件包，用来打包软件运行环境和基于运行环境开发的软件，它包含</span><br><span class="line">运行某个软件所需的所有内容，包括代码、运行时、库、环境变量和配置文件。</span><br></pre></td></tr></table></figure>
+
+<h3 id="Docker镜像加载原理"><a href="#Docker镜像加载原理" class="headerlink" title="Docker镜像加载原理"></a><strong>Docker镜像加载原理</strong></h3><ul>
+<li>UnionFS (联合文件系统)<ul>
+<li>Docker 镜像的基础</li>
+<li>Union文件系统(UnionFS)是一种分层、轻量级并且高性能的文件系统， 它支持对文件系统的修改作为一次提交来一层层的叠加，同时可以将不同目录挂载到同一个虚拟文件系 统下</li>
+</ul>
+</li>
+<li>Docker镜像加载原理<ul>
+<li>docker的镜像实际上由一层一层的文件系统组成，这种层级的文件系统UnionFS。</li>
+</ul>
+</li>
+</ul>
+<h3 id="分层理解"><a href="#分层理解" class="headerlink" title="分层理解"></a><strong>分层理解</strong></h3><p><code>我们可以去下载一个镜像，注意观察下载的日志输出，可以看到是一层一层的在下载!</code></p>
+<img src="/2021/04/02/Docker基本使用-一/4.png" title="Docker结构图">
+
+<p><code>Docker镜像采用这种分层结构，最大的好处莫过于资源共享了</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 查看镜像分层的方式可以通过 docker image inspect ID</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><strong>重点</strong></p>
+</blockquote>
+<p>​        所有的 Docker 镜像都起始于一个基础镜像层，当进行修改或增加新的内容时，就会在当前镜像层之 上，创建新的镜像层。</p>
+<p>​        举一个简单的例子，假如基于 Ubuntu Linux 16.04 创建一个新的镜像，这就是新镜像的第一层;如果 在该镜像中添加 Python包，就会在基础镜像层之上创建第二个镜像层;如果继续添加一个安全补丁，就 会创建第三个镜像层。</p>
+<p>​        该镜像当前已经包含 3 个镜像层，如下图所示。</p>
+<img src="/2021/04/02/Docker基本使用-一/5.png" title="Docker结构图">
+
+<blockquote>
+<p>注意</p>
+</blockquote>
+<p>​        Docker镜像都是只读的，当容器启动时，一个新的可写层被加载到镜像的顶部! 这一层就是我们通常说的容器层，容器之下的都叫镜像层!容器层是可写的。</p>
+<h3 id="镜像Commit"><a href="#镜像Commit" class="headerlink" title="镜像Commit"></a><strong>镜像Commit</strong></h3><p><strong>docker commit</strong> <strong>从容器创建一个新的镜像。</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker commit 提交容器副本使之成为一个新的镜像!</span><br><span class="line"><span class="meta">#</span> 语法</span><br><span class="line">docker commit -m="提交的描述信息" -a="作者" 容器id 要创建的目标镜像名:[标签名]</span><br></pre></td></tr></table></figure>
+
+<p><strong>测试</strong></p>
+<p>比如我们自己需要制作一个镜像，以ubuntu16.04 为基础镜像，在该镜像上安装深度学习库，比如要安装python 和 pytorch</p>
+<p>我们就可以按上述说的方式进行操作</p>
+<ol>
+<li>拉去ubuntu 16.04基础镜像</li>
+<li>启动镜像，生成一个容器，进入该容器</li>
+<li>安装python，pytorch 安装包</li>
+<li>退出</li>
+<li>docker commit </li>
+</ol>
+<h2 id="容器数据卷"><a href="#容器数据卷" class="headerlink" title="容器数据卷"></a><strong>容器数据卷</strong></h2><h3 id="什么是容器数据卷"><a href="#什么是容器数据卷" class="headerlink" title="什么是容器数据卷"></a><strong>什么是容器数据卷</strong></h3><p><strong>docker的理念回顾:</strong></p>
+<p>​        将应用和运行的环境打包形成容器运行，运行可以伴随着容器，但是我们对于数据的要求，是希望能够持久化的! 就好比，你安装一个MySQL，结果你把容器删了，就相当于删库跑路了，这TM也太扯了吧!</p>
+<p>​        所以我们希望容器之间有可能可以共享数据，Docker容器产生的数据，如果不通过docker commit 生成 新的镜像，使得数据作为镜像的一部分保存下来，那么当容器删除后，数据自然也就没有了!这样是行 不通的!</p>
+<p>​        为了能保存数据在Docker中我们就可以使用卷!让数据挂载到我们本地!这样数据就不会因为容器删除 而丢失了!</p>
+<p><strong>作用:</strong></p>
+<p>​        卷就是目录或者文件，存在一个或者多个容器中，由docker挂载到容器，但不属于联合文件系统，因此 能够绕过 Union File System ， 提供一些用于持续存储或共享数据的特性:</p>
+<p>​        卷的设计目的就是数据的持久化，完全独立于容器的生存周期，因此Docker不会在容器删除时删除其挂 载的数据卷。</p>
+<p><strong>特点:</strong></p>
+<ol>
+<li>数据卷可在容器之间共享或重用数据</li>
+<li>卷中的更改可以直接生效 </li>
+<li>数据卷中的更改不会包含在镜像的更新中 </li>
+<li>数据卷的生命周期一直持续到没有容器使用它为止</li>
+</ol>
+<p><strong>所以:总结一句话: 就是容器的持久化，以及容器间的继承和数据共享!</strong></p>
+<h3 id="使用数据卷"><a href="#使用数据卷" class="headerlink" title="使用数据卷"></a><strong>使用数据卷</strong></h3><blockquote>
+<p>方式一：容器中直接使用命令来添加</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 命令</span><br><span class="line">docker run -it -v 宿主机绝对路径目录:容器内目录 镜像名</span><br><span class="line"><span class="meta">#</span> 测试</span><br><span class="line">[root@wl ~]# docker run -it -v /home/ceshi:/home centos /bin/bash</span><br></pre></td></tr></table></figure>
+
+<p>查看数据卷是否挂载成功 <code>docker inspect 容器id</code></p>
+<img src="/2021/04/02/Docker基本使用-一/6.png" title="Docker结构图">
+
+<p><strong>测试容器和宿主机之间数据共享:可以发现，在容器中创建的文件会在宿主机对应目录上看到!</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">测试容器停止退出后，主机修改数据是否会同步!</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>停止容器</li>
+<li>在宿主机上修改文件，增加些内容</li>
+<li>启动刚才停止的容器</li>
+<li>然后查看对应的文件，发现数据依旧同步!ok</li>
+</ol>
+<blockquote>
+<p>方式二：通过Docker File 来添加(了解)</p>
+</blockquote>
+<p>测试:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 1、我们在宿主机 /home 目录下新建一个 docker-test-volume文件夹 </span><br><span class="line">[root@wl home]# mkdir docker-test-volume</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 说明:在编写DockerFile文件中使用 VOLUME 指令来给镜像添加一个或多个数据卷 VOLUME["/dataVolumeContainer1","/dataVolumeContainer2","/dataVolumeContainer 3"]</span><br><span class="line"><span class="meta">#</span> 出于可移植和分享的考虑，我们之前使用的 -v 主机目录:容器目录 这种方式不能够直接在 DockerFile中实现。</span><br><span class="line"><span class="meta">#</span> 由于宿主机目录是依赖于特定宿主机的，并不能够保证在所有宿主机上都存在这样的特定目录.</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 2、编写DockerFile文件</span><br><span class="line">[root@wl docker-test-volume]# pwd /home/docker-test-volume</span><br><span class="line">[root@wl docker-test-volume]# vim dockerfile1 </span><br><span class="line">[root@wl docker-test-volume]# cat dockerfile1</span><br><span class="line"><span class="meta">#</span> volume test</span><br><span class="line">FROM centos</span><br><span class="line">VOLUME ["/dataVolumeContainer1","/dataVolumeContainer2"] CMD echo "-------end------"</span><br><span class="line">CMD /bin/bash</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 3、build后生成镜像，获得一个新镜像 kuangshen/centos</span><br><span class="line">docker build -f /home/docker-test-volume/dockerfile1 -t kuangshen/centos . # 注意最后有个.</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 4、启动容器</span><br><span class="line">[root@wl docker-test-volume]# docker run -it 0e97e1891a3d /bin/bash # 启动容器</span><br><span class="line">[root@f5824970eefc /]# ls -l  # 可以看到对应的两个数据卷目录</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 问题:通过上述步骤，容器内的卷目录地址就已经知道了，但是对应的主机目录地址在哪里呢?</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 5、我们在数据卷中新建一个文件</span><br><span class="line">[root@f5824970eefc dataVolumeContainer1]# pwd /dataVolumeContainer1</span><br><span class="line">[root@f5824970eefc dataVolumeContainer1]# touch container.txt</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 6、查看下这个容器的信息</span><br><span class="line">[root@wl ~]# docker inspect 0e97e1891a3d</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 查看输出的Volumes</span><br><span class="line">"Volumes": &#123;</span><br><span class="line">    "/dataVolumeContainer1": &#123;&#125;,</span><br><span class="line">    "/dataVolumeContainer2": &#123;&#125;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+
+<img src="/2021/04/02/Docker基本使用-一/6.png" title="Docker结构图">
+
+<h3 id="练习-1"><a href="#练习-1" class="headerlink" title="练习"></a>练习</h3><blockquote>
+<p>通过Docker 来 安装 mysql</p>
+</blockquote>
+<p><strong>思考:mysql 数据持久化的问题!</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 1、搜索镜像</span><br><span class="line">[root@wl ~]# docker search mysql</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 2、拉取镜像</span><br><span class="line">[root@wl ~]# docker pull mysql:5.7</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 3、启动容器 -e 环境变量!</span><br><span class="line"><span class="meta">#</span> 注意: mysql的数据应该不丢失!先体验下 -v 挂载卷! 参考官方文档</span><br><span class="line">[root@wl home]# docker run -d -p 3310:3306 -v /home/mysql/conf:/etc/mysql/conf.d -v /home/mysql/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 --name mysql01 mysql:5.7</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 4、使用本地的mysql可视化工具连接测试一下 端口号 3310</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 5、查看本地的 /home/mysql 目录</span><br><span class="line"><span class="meta">#</span> 可以看到我们刚刚建立的mysql数据库在本地存储着</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 6、删除mysql容器</span><br><span class="line">[root@wl data]# docker rm -f mysql01 # 删除容器，然后发现远程连接失败!</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 7、在看对我们宿主机上对应目录的文件，依然是存在的，但我们用上述启动容器命令再一次启动的时候，</span><br><span class="line"><span class="meta">#</span>    连接数据库，发现该有的数据依然存在</span><br></pre></td></tr></table></figure>
+
+<h3 id="匿名和具名挂载"><a href="#匿名和具名挂载" class="headerlink" title="匿名和具名挂载"></a><strong>匿名和具名挂载</strong></h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 匿名挂载</span><br><span class="line">-v 容器内路径</span><br><span class="line">docker run -d -P --name nginx01 -v /etc/nginx nginx</span><br><span class="line"><span class="meta">#</span> 匿名挂载的缺点，就是不好维护，通常使用命令 docker volume维护 docker volume ls</span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 具名挂载</span><br><span class="line">-v 卷名:/容器内路径</span><br><span class="line">docker run -d -P --name nginx02 -v nginxconfig:/etc/nginx nginx</span><br><span class="line"><span class="meta">#</span> 查看挂载的路径</span><br><span class="line">[root@wl ~]# docker volume inspect nginxconfig [</span><br><span class="line">    &#123;</span><br><span class="line">        "CreatedAt": "2020-05-13T17:23:00+08:00",</span><br><span class="line">        "Driver": "local",</span><br><span class="line">        "Labels": null,</span><br><span class="line">        "Mountpoint": "/var/lib/docker/volumes/nginxconfig/_data",</span><br><span class="line">        "Name": "nginxconfig",</span><br><span class="line">        "Options": null,</span><br><span class="line">        "Scope": "local"</span><br><span class="line">&#125; ]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span> 改变文件的读写权限</span><br><span class="line"><span class="meta">#</span> ro: readonly</span><br><span class="line"><span class="meta">#</span> rw: readwrite</span><br><span class="line"><span class="meta">#</span> 指定容器对我们挂载出来的内容的读写权限</span><br><span class="line">docker run -d -P --name nginx02 -v nginxconfig:/etc/nginx:ro nginx docker run -d -P --name nginx02 -v nginxconfig:/etc/nginx:rw nginx</span><br></pre></td></tr></table></figure>
+
+<h3 id="数据卷容器"><a href="#数据卷容器" class="headerlink" title="数据卷容器"></a><strong>数据卷容器</strong></h3><blockquote>
+<p>如何让多个容器数据共享</p>
+</blockquote>
+<p>​        命名的容器挂载数据卷，其他容器通过挂载这个(父容器)实现数据共享，挂载数据卷的容器，称之为<br>数据卷容器。</p>
+<p>​        我们使用上一步的镜像:wl/centos 为模板，运行容器 docker01，docker02，docker03，他们都会具有容器卷</p>
+<p>1、先启动一个父容器docker01，然后在dataVolumeContainer2新增文件</p>
+<img src="/2021/04/02/Docker基本使用-一/7.png" title="Docker结构图">
+
+<p>2、创建docker02，docker03 让他们继承docker01 –volumes-from</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[root@wl docker-test-volume]# docker run -it --name docker02 --volumes-from docker01 wl/centos</span><br><span class="line">[root@95164598b306 dataVolumeContainer2]# touch docker02.txt</span><br><span class="line"></span><br><span class="line">[root@wl docker-test-volume]# docker run -it --name docker03 --volumes-from docker01 kuangshen/centos</span><br><span class="line">[root@95164598b306 dataVolumeContainer2]# touch docker03.txt</span><br></pre></td></tr></table></figure>
+
+<p>3、回到docker01发现可以看到 02 和 03 添加的共享文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@wl docker-test-volume]# docker attach docker01</span><br><span class="line">[root@799b6ea5db7c dataVolumeContainer2]# ls -l</span><br><span class="line">total 0</span><br><span class="line">-rw-r--r-- 1 root root 0 May 11 13:20 docker01.txt</span><br><span class="line">-rw-r--r-- 1 root root 0 May 11 13:22 docker02.txt</span><br><span class="line">-rw-r--r-- 1 root root 0 May 11 13:24 docker03.txt</span><br></pre></td></tr></table></figure>
+
+<p>4、删除docker01，docker02 修改后docker03还能不能访问</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">[root@wl docker-test-volume]# docker rm -f docker01</span><br><span class="line">docker01</span><br><span class="line"></span><br><span class="line">[root@wl docker-test-volume]# docker attach docker02</span><br><span class="line">[root@ea4c82779077 dataVolumeContainer2]# ls -l</span><br><span class="line">total 0</span><br><span class="line">-rw-r--r-- 1 root root 0 May 11 13:20 docker01.txt</span><br><span class="line">-rw-r--r-- 1 root root 0 May 11 13:22 docker02.txt</span><br><span class="line">-rw-r--r-- 1 root root 0 May 11 13:24 docker03.txt </span><br><span class="line"></span><br><span class="line">[root@ea4c82779077 dataVolumeContainer2]# touch docker02-update.txt </span><br><span class="line">[root@ea4c82779077 dataVolumeContainer2]# ls -a</span><br><span class="line">. .. docker01.txt docker02.txt docker02-update.txt docker03.txt </span><br><span class="line"></span><br><span class="line">[root@ea4c82779077 dataVolumeContainer2]# Ctrl+P+Q 退出容器</span><br><span class="line">[root@kuangshen docker-test-volume]# docker attach docker03</span><br><span class="line">[root@95164598b306 dataVolumeContainer2]# ls -l</span><br><span class="line">total 0</span><br><span class="line">-rw-r--r-- 1 root root 0 May 11 13:20 docker01.txt</span><br><span class="line">-rw-r--r-- 1 root root 0 May 11 13:22 docker02.txt</span><br><span class="line">-rw-r--r-- 1 root root 0 May 11 13:29 docker02-update.txt</span><br><span class="line">-rw-r--r-- 1 root root 0 May 11 13:24 docker03.txt</span><br></pre></td></tr></table></figure>
+
+<p>5、删除docker02 ，docker03还能不能访问</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[root@wl docker-test-volume]# docker ps</span><br><span class="line">CONTAINER ID</span><br><span class="line">95164598b306</span><br><span class="line">ea4c82779077</span><br><span class="line">[root@wl docker-test-volume]# docker rm -f docker02</span><br><span class="line">docker02</span><br><span class="line">[root@wl docker-test-volume]# docker attach docker03</span><br><span class="line">[root@95164598b306 dataVolumeContainer2]# ls -l</span><br><span class="line">total 0</span><br><span class="line">-rw-r--r-- 1 root root 0 May 11 13:20 docker01.txt</span><br><span class="line">-rw-r--r-- 1 root root 0 May 11 13:22 docker02.txt</span><br><span class="line">-rw-r--r-- 1 root root 0 May 11 13:29 docker02-update.txt</span><br><span class="line">-rw-r--r-- 1 root root 0 May 11 13:24 docker03.txt</span><br><span class="line">[root@95164598b306 dataVolumeContainer2]# touch docker03-update.txt</span><br></pre></td></tr></table></figure>
+
+<p>6、新建docker04继承docker03，然后再删除docker03，看下是否可以访问!</p>
+<img src="/2021/04/02/Docker基本使用-一/8.png" title="Docker结构图">
+
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>结论:</strong></p>
+<blockquote>
+<p>容器之间配置信息的传递，数据卷的生命周期一直持续到没有容器使用它为止。<br>存储在本机的文件则会一直保留!</p>
+</blockquote>
+<h2 id="什么是DockerFile"><a href="#什么是DockerFile" class="headerlink" title="什么是DockerFile"></a><strong>什么是DockerFile</strong></h2><blockquote>
+<p>到目前为止，我们已经知道了一种生成镜像的方式了，就是上述的 Commit 命令</p>
+<p>但是我们在很多项目中看到都有一个DockerFile的东西，接下来就介绍一下这个东西吧。</p>
+</blockquote>
+<p><strong>DockerFile 是用来构建Docker镜像的构建文件，是由一些列命令和参数构成的脚本。</strong></p>
+<h2 id="发布镜像"><a href="#发布镜像" class="headerlink" title="发布镜像"></a><strong>发布镜像</strong></h2><h2 id="Docker网络讲解"><a href="#Docker网络讲解" class="headerlink" title="Docker网络讲解"></a><strong>Docker网络讲解</strong></h2><h2 id="实战-部署一个Redis集群"><a href="#实战-部署一个Redis集群" class="headerlink" title="实战:部署一个Redis集群"></a><strong>实战:部署一个Redis集群</strong></h2>
       
     </div>
     
@@ -588,7 +720,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">50</span>
+                  <span class="site-state-item-count">49</span>
                   <span class="site-state-item-name">tags</span>
                 
               </div>
@@ -621,7 +753,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#内容安排"><span class="nav-number">1.</span> <span class="nav-text">内容安排</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker基础"><span class="nav-number">1.1.</span> <span class="nav-text">Docker基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker-是什么"><span class="nav-number">1.1.1.</span> <span class="nav-text">Docker 是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么会出现Docker这个东西"><span class="nav-number">1.1.2.</span> <span class="nav-text">为什么会出现Docker这个东西</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker和虚拟机的对比"><span class="nav-number">1.1.3.</span> <span class="nav-text">Docker和虚拟机的对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker的基本组成"><span class="nav-number">1.1.4.</span> <span class="nav-text">Docker的基本组成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker的安装"><span class="nav-number">1.1.5.</span> <span class="nav-text">Docker的安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker的简单使用"><span class="nav-number">1.1.6.</span> <span class="nav-text">Docker的简单使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker命令记录"><span class="nav-number">1.1.7.</span> <span class="nav-text">Docker命令记录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小结"><span class="nav-number">1.1.8.</span> <span class="nav-text">小结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#练习"><span class="nav-number">1.1.9.</span> <span class="nav-text">练习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最后"><span class="nav-number">1.1.10.</span> <span class="nav-text">最后</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker镜像讲解"><span class="nav-number">1.2.</span> <span class="nav-text">Docker镜像讲解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#容器数据卷"><span class="nav-number">1.3.</span> <span class="nav-text">容器数据卷</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是DockerFile"><span class="nav-number">1.4.</span> <span class="nav-text">什么是DockerFile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发布镜像"><span class="nav-number">1.5.</span> <span class="nav-text">发布镜像</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker网络讲解"><span class="nav-number">1.6.</span> <span class="nav-text">Docker网络讲解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实战-部署一个Redis集群"><span class="nav-number">1.7.</span> <span class="nav-text">实战:部署一个Redis集群</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#内容安排"><span class="nav-number">1.</span> <span class="nav-text">内容安排</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker基础"><span class="nav-number">1.1.</span> <span class="nav-text">Docker基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker-是什么"><span class="nav-number">1.1.1.</span> <span class="nav-text">Docker 是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么会出现Docker这个东西"><span class="nav-number">1.1.2.</span> <span class="nav-text">为什么会出现Docker这个东西</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker和虚拟机的对比"><span class="nav-number">1.1.3.</span> <span class="nav-text">Docker和虚拟机的对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker的基本组成"><span class="nav-number">1.1.4.</span> <span class="nav-text">Docker的基本组成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker的安装"><span class="nav-number">1.1.5.</span> <span class="nav-text">Docker的安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker的简单使用"><span class="nav-number">1.1.6.</span> <span class="nav-text">Docker的简单使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker命令记录"><span class="nav-number">1.1.7.</span> <span class="nav-text">Docker命令记录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#小结"><span class="nav-number">1.1.8.</span> <span class="nav-text">小结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#练习"><span class="nav-number">1.1.9.</span> <span class="nav-text">练习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最后"><span class="nav-number">1.1.10.</span> <span class="nav-text">最后</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker镜像讲解"><span class="nav-number">1.2.</span> <span class="nav-text">Docker镜像讲解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#镜像是什么"><span class="nav-number">1.2.1.</span> <span class="nav-text">镜像是什么</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker镜像加载原理"><span class="nav-number">1.2.2.</span> <span class="nav-text">Docker镜像加载原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分层理解"><span class="nav-number">1.2.3.</span> <span class="nav-text">分层理解</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#镜像Commit"><span class="nav-number">1.2.4.</span> <span class="nav-text">镜像Commit</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#容器数据卷"><span class="nav-number">1.3.</span> <span class="nav-text">容器数据卷</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是容器数据卷"><span class="nav-number">1.3.1.</span> <span class="nav-text">什么是容器数据卷</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用数据卷"><span class="nav-number">1.3.2.</span> <span class="nav-text">使用数据卷</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#练习-1"><span class="nav-number">1.3.3.</span> <span class="nav-text">练习</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#匿名和具名挂载"><span class="nav-number">1.3.4.</span> <span class="nav-text">匿名和具名挂载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据卷容器"><span class="nav-number">1.3.5.</span> <span class="nav-text">数据卷容器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是DockerFile"><span class="nav-number">1.4.</span> <span class="nav-text">什么是DockerFile</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#发布镜像"><span class="nav-number">1.5.</span> <span class="nav-text">发布镜像</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker网络讲解"><span class="nav-number">1.6.</span> <span class="nav-text">Docker网络讲解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实战-部署一个Redis集群"><span class="nav-number">1.7.</span> <span class="nav-text">实战:部署一个Redis集群</span></a></li></ol></li></ol></div>
             
 
           </div>
