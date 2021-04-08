@@ -412,13 +412,330 @@ root@a95d5f2f057f:/usr/share/nginx/html# cat index.html
 
 ## Docker镜像讲解
 
+### **镜像是什么**
 
+```
+镜像是一种轻量级、可执行的独立软件包，用来打包软件运行环境和基于运行环境开发的软件，它包含
+运行某个软件所需的所有内容，包括代码、运行时、库、环境变量和配置文件。
+```
+
+### **Docker镜像加载原理**
+
++ UnionFS (联合文件系统)
+  + Docker 镜像的基础
+  + Union文件系统(UnionFS)是一种分层、轻量级并且高性能的文件系统， 它支持对文件系统的修改作为一次提交来一层层的叠加，同时可以将不同目录挂载到同一个虚拟文件系 统下
++ Docker镜像加载原理
+  + docker的镜像实际上由一层一层的文件系统组成，这种层级的文件系统UnionFS。
+
+### **分层理解**
+
+`我们可以去下载一个镜像，注意观察下载的日志输出，可以看到是一层一层的在下载!`
+
+{% asset_img 4.png Docker结构图  %}
+
+`Docker镜像采用这种分层结构，最大的好处莫过于资源共享了`
+
+```shell
+# 查看镜像分层的方式可以通过 docker image inspect ID
+```
+
+> **重点**
+
+​		所有的 Docker 镜像都起始于一个基础镜像层，当进行修改或增加新的内容时，就会在当前镜像层之 上，创建新的镜像层。
+
+​		举一个简单的例子，假如基于 Ubuntu Linux 16.04 创建一个新的镜像，这就是新镜像的第一层;如果 在该镜像中添加 Python包，就会在基础镜像层之上创建第二个镜像层;如果继续添加一个安全补丁，就 会创建第三个镜像层。
+
+​		该镜像当前已经包含 3 个镜像层，如下图所示。
+
+{% asset_img 5.png Docker结构图  %}
+
+> 注意
+
+​		Docker镜像都是只读的，当容器启动时，一个新的可写层被加载到镜像的顶部! 这一层就是我们通常说的容器层，容器之下的都叫镜像层!容器层是可写的。
+
+### **镜像Commit**
+
+**docker commit** **从容器创建一个新的镜像。**
+
+```shell
+docker commit 提交容器副本使之成为一个新的镜像!
+# 语法
+docker commit -m="提交的描述信息" -a="作者" 容器id 要创建的目标镜像名:[标签名]
+```
+
+**测试**
+
+比如我们自己需要制作一个镜像，以ubuntu16.04 为基础镜像，在该镜像上安装深度学习库，比如要安装python 和 pytorch
+
+我们就可以按上述说的方式进行操作
+
+1. 拉去ubuntu 16.04基础镜像
+2. 启动镜像，生成一个容器，进入该容器
+3. 安装python，pytorch 安装包
+4. 退出
+5. docker commit 
 
 ## **容器数据卷**
 
+### **什么是容器数据卷**
 
+**docker的理念回顾:**
+
+​		将应用和运行的环境打包形成容器运行，运行可以伴随着容器，但是我们对于数据的要求，是希望能够持久化的! 就好比，你安装一个MySQL，结果你把容器删了，就相当于删库跑路了，这TM也太扯了吧!
+
+​		所以我们希望容器之间有可能可以共享数据，Docker容器产生的数据，如果不通过docker commit 生成 新的镜像，使得数据作为镜像的一部分保存下来，那么当容器删除后，数据自然也就没有了!这样是行 不通的!
+
+​		为了能保存数据在Docker中我们就可以使用卷!让数据挂载到我们本地!这样数据就不会因为容器删除 而丢失了!
+
+**作用:**
+
+​		卷就是目录或者文件，存在一个或者多个容器中，由docker挂载到容器，但不属于联合文件系统，因此 能够绕过 Union File System ， 提供一些用于持续存储或共享数据的特性:
+
+​		卷的设计目的就是数据的持久化，完全独立于容器的生存周期，因此Docker不会在容器删除时删除其挂 载的数据卷。
+
+**特点:**
+
+1. 数据卷可在容器之间共享或重用数据
+2. 卷中的更改可以直接生效 
+3. 数据卷中的更改不会包含在镜像的更新中 
+4. 数据卷的生命周期一直持续到没有容器使用它为止
+
+**所以:总结一句话: 就是容器的持久化，以及容器间的继承和数据共享!**
+
+### **使用数据卷**
+
+> 方式一：容器中直接使用命令来添加
+
+```shell
+# 命令
+docker run -it -v 宿主机绝对路径目录:容器内目录 镜像名
+# 测试
+[root@wl ~]# docker run -it -v /home/ceshi:/home centos /bin/bash
+```
+
+查看数据卷是否挂载成功 `docker inspect 容器id`
+
+{% asset_img 6.png Docker结构图  %}
+
+**测试容器和宿主机之间数据共享:可以发现，在容器中创建的文件会在宿主机对应目录上看到!**
+
+```shell
+测试容器停止退出后，主机修改数据是否会同步!
+```
+
+1. 停止容器
+2. 在宿主机上修改文件，增加些内容
+3.  启动刚才停止的容器
+4.  然后查看对应的文件，发现数据依旧同步!ok
+
+> 方式二：通过Docker File 来添加(了解)
+
+测试:
+
+```shell
+# 1、我们在宿主机 /home 目录下新建一个 docker-test-volume文件夹 
+[root@wl home]# mkdir docker-test-volume
+
+# 说明:在编写DockerFile文件中使用 VOLUME 指令来给镜像添加一个或多个数据卷 VOLUME["/dataVolumeContainer1","/dataVolumeContainer2","/dataVolumeContainer 3"]
+# 出于可移植和分享的考虑，我们之前使用的 -v 主机目录:容器目录 这种方式不能够直接在 DockerFile中实现。
+# 由于宿主机目录是依赖于特定宿主机的，并不能够保证在所有宿主机上都存在这样的特定目录.
+
+# 2、编写DockerFile文件
+[root@wl docker-test-volume]# pwd /home/docker-test-volume
+[root@wl docker-test-volume]# vim dockerfile1 
+[root@wl docker-test-volume]# cat dockerfile1
+# volume test
+FROM centos
+VOLUME ["/dataVolumeContainer1","/dataVolumeContainer2"] CMD echo "-------end------"
+CMD /bin/bash
+
+# 3、build后生成镜像，获得一个新镜像 kuangshen/centos
+docker build -f /home/docker-test-volume/dockerfile1 -t kuangshen/centos . # 注意最后有个.
+
+# 4、启动容器
+[root@wl docker-test-volume]# docker run -it 0e97e1891a3d /bin/bash # 启动容器
+[root@f5824970eefc /]# ls -l  # 可以看到对应的两个数据卷目录
+
+# 问题:通过上述步骤，容器内的卷目录地址就已经知道了，但是对应的主机目录地址在哪里呢?
+
+# 5、我们在数据卷中新建一个文件
+[root@f5824970eefc dataVolumeContainer1]# pwd /dataVolumeContainer1
+[root@f5824970eefc dataVolumeContainer1]# touch container.txt
+
+# 6、查看下这个容器的信息
+[root@wl ~]# docker inspect 0e97e1891a3d
+
+# 查看输出的Volumes
+"Volumes": {
+    "/dataVolumeContainer1": {},
+    "/dataVolumeContainer2": {}
+},
+```
+
+{% asset_img 6.png Docker结构图  %}
+
+### 练习
+
+> 通过Docker 来 安装 mysql
+
+**思考:mysql 数据持久化的问题!**
+
+```shell
+# 1、搜索镜像
+[root@wl ~]# docker search mysql
+
+# 2、拉取镜像
+[root@wl ~]# docker pull mysql:5.7
+
+# 3、启动容器 -e 环境变量!
+# 注意: mysql的数据应该不丢失!先体验下 -v 挂载卷! 参考官方文档
+[root@wl home]# docker run -d -p 3310:3306 -v /home/mysql/conf:/etc/mysql/conf.d -v /home/mysql/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=123456 --name mysql01 mysql:5.7
+
+# 4、使用本地的mysql可视化工具连接测试一下 端口号 3310
+
+# 5、查看本地的 /home/mysql 目录
+# 可以看到我们刚刚建立的mysql数据库在本地存储着
+
+# 6、删除mysql容器
+[root@wl data]# docker rm -f mysql01 # 删除容器，然后发现远程连接失败!
+
+# 7、在看对我们宿主机上对应目录的文件，依然是存在的，但我们用上述启动容器命令再一次启动的时候，
+#    连接数据库，发现该有的数据依然存在
+```
+
+### **匿名和具名挂载**
+
+```shell
+# 匿名挂载
+-v 容器内路径
+docker run -d -P --name nginx01 -v /etc/nginx nginx
+# 匿名挂载的缺点，就是不好维护，通常使用命令 docker volume维护 docker volume ls
+
+# 具名挂载
+-v 卷名:/容器内路径
+docker run -d -P --name nginx02 -v nginxconfig:/etc/nginx nginx
+# 查看挂载的路径
+[root@wl ~]# docker volume inspect nginxconfig [
+    {
+        "CreatedAt": "2020-05-13T17:23:00+08:00",
+        "Driver": "local",
+        "Labels": null,
+        "Mountpoint": "/var/lib/docker/volumes/nginxconfig/_data",
+        "Name": "nginxconfig",
+        "Options": null,
+        "Scope": "local"
+} ]
+
+
+# 改变文件的读写权限
+# ro: readonly
+# rw: readwrite
+# 指定容器对我们挂载出来的内容的读写权限
+docker run -d -P --name nginx02 -v nginxconfig:/etc/nginx:ro nginx docker run -d -P --name nginx02 -v nginxconfig:/etc/nginx:rw nginx
+```
+
+### **数据卷容器**
+
+> 如何让多个容器数据共享
+
+​		命名的容器挂载数据卷，其他容器通过挂载这个(父容器)实现数据共享，挂载数据卷的容器，称之为
+数据卷容器。
+
+​		我们使用上一步的镜像:wl/centos 为模板，运行容器 docker01，docker02，docker03，他们都会具有容器卷
+
+1、先启动一个父容器docker01，然后在dataVolumeContainer2新增文件
+
+{% asset_img 7.png Docker结构图  %}
+
+2、创建docker02，docker03 让他们继承docker01 --volumes-from
+
+```shell
+[root@wl docker-test-volume]# docker run -it --name docker02 --volumes-from docker01 wl/centos
+[root@95164598b306 dataVolumeContainer2]# touch docker02.txt
+
+[root@wl docker-test-volume]# docker run -it --name docker03 --volumes-from docker01 kuangshen/centos
+[root@95164598b306 dataVolumeContainer2]# touch docker03.txt
+```
+
+3、回到docker01发现可以看到 02 和 03 添加的共享文件
+
+```shell
+[root@wl docker-test-volume]# docker attach docker01
+[root@799b6ea5db7c dataVolumeContainer2]# ls -l
+total 0
+-rw-r--r-- 1 root root 0 May 11 13:20 docker01.txt
+-rw-r--r-- 1 root root 0 May 11 13:22 docker02.txt
+-rw-r--r-- 1 root root 0 May 11 13:24 docker03.txt
+```
+
+4、删除docker01，docker02 修改后docker03还能不能访问
+
+```shell
+[root@wl docker-test-volume]# docker rm -f docker01
+docker01
+
+[root@wl docker-test-volume]# docker attach docker02
+[root@ea4c82779077 dataVolumeContainer2]# ls -l
+total 0
+-rw-r--r-- 1 root root 0 May 11 13:20 docker01.txt
+-rw-r--r-- 1 root root 0 May 11 13:22 docker02.txt
+-rw-r--r-- 1 root root 0 May 11 13:24 docker03.txt 
+
+[root@ea4c82779077 dataVolumeContainer2]# touch docker02-update.txt 
+[root@ea4c82779077 dataVolumeContainer2]# ls -a
+. .. docker01.txt docker02.txt docker02-update.txt docker03.txt 
+
+[root@ea4c82779077 dataVolumeContainer2]# Ctrl+P+Q 退出容器
+[root@kuangshen docker-test-volume]# docker attach docker03
+[root@95164598b306 dataVolumeContainer2]# ls -l
+total 0
+-rw-r--r-- 1 root root 0 May 11 13:20 docker01.txt
+-rw-r--r-- 1 root root 0 May 11 13:22 docker02.txt
+-rw-r--r-- 1 root root 0 May 11 13:29 docker02-update.txt
+-rw-r--r-- 1 root root 0 May 11 13:24 docker03.txt
+```
+
+5、删除docker02 ，docker03还能不能访问
+
+```shell
+[root@wl docker-test-volume]# docker ps
+CONTAINER ID
+95164598b306
+ea4c82779077
+[root@wl docker-test-volume]# docker rm -f docker02
+docker02
+[root@wl docker-test-volume]# docker attach docker03
+[root@95164598b306 dataVolumeContainer2]# ls -l
+total 0
+-rw-r--r-- 1 root root 0 May 11 13:20 docker01.txt
+-rw-r--r-- 1 root root 0 May 11 13:22 docker02.txt
+-rw-r--r-- 1 root root 0 May 11 13:29 docker02-update.txt
+-rw-r--r-- 1 root root 0 May 11 13:24 docker03.txt
+[root@95164598b306 dataVolumeContainer2]# touch docker03-update.txt
+```
+
+6、新建docker04继承docker03，然后再删除docker03，看下是否可以访问!
+
+{% asset_img 8.png Docker结构图  %}
+
+```shell
+
+```
+
+
+
+**结论:**
+
+> 容器之间配置信息的传递，数据卷的生命周期一直持续到没有容器使用它为止。
+> 存储在本机的文件则会一直保留!
 
 ## **什么是DockerFile**
+
+> 到目前为止，我们已经知道了一种生成镜像的方式了，就是上述的 Commit 命令
+>
+> 但是我们在很多项目中看到都有一个DockerFile的东西，接下来就介绍一下这个东西吧。
+
+**DockerFile 是用来构建Docker镜像的构建文件，是由一些列命令和参数构成的脚本。**
 
 
 
