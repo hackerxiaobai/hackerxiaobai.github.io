@@ -16,7 +16,6 @@ tags:
 + **Docker镜像讲解**
 + **容器数据卷**
 + **什么是DockerFile**
-+ **发布镜像**
 + **Docker网络讲解**
 + **实战:部署一个Redis集群**
 
@@ -719,7 +718,30 @@ total 0
 {% asset_img 8.png Docker结构图  %}
 
 ```shell
-
+[root@2119f4f23a92 /]# cd dataVolumeContainer2
+[root@2119f4f23a92 dataVolumeContainer2]# ls -l
+total 0
+-rw-r--r-- 1 root root 0 May 11 13:20 docker01.txt
+-rw-r--r-- 1 root root 0 May 11 13:22 docker02.txt
+-rw-r--r-- 1 root root 0 May 11 13:29 docker02-update.txt
+-rw-r--r-- 1 root root 0 May 11 13:32 docker03-update.txt
+-rw-r--r-- 1 root root 0 May 11 13:24 docker03.txt
+# 查看当前运行的容器
+[root@wl docker-test-volume]# docker ps
+CONTAINER ID
+2119f4f23a92
+95164598b306
+IMAGE
+wl/centos
+wl/centos
+NAMES
+docker04
+docker03
+# 继续删除docker03
+[root@wl docker-test-volume]# docker rm -f docker03 docker03
+[root@wl docker-test-volume]# docker attach docker04 [root@2119f4f23a92 dataVolumeContainer2]# ls -l
+total 0
+-rw-r--r-- 1 root root 0 May 11 13:20 docker01.txt -rw-r--r-- 1 root root 0 May 11 13:22 docker02.txt -rw-r--r-- 1 root root 0 May 11 13:29 docker02-update.txt -rw-r--r-- 1 root root 0 May 11 13:32 docker03-update.txt -rw-r--r-- 1 root root 0 May 11 13:24 docker03.txt
 ```
 
 
@@ -737,14 +759,382 @@ total 0
 
 **DockerFile 是用来构建Docker镜像的构建文件，是由一些列命令和参数构成的脚本。**
 
+**流程:**
+
++ 开发应用=>DockerFile=>打包为镜像=>上传到仓库(私有仓库，公有仓库)=> 下载镜像 => 启动 运行。
+
+**构建步骤:**
+
+1. 编写DockerFile文件
+2. docker build 构建镜像
+3. docker run
+
+### **DockerFile构建过程**
+
+**基础知识:**
+
+1. 每条保留字指令都必须为大写字母且后面要跟随至少一个参数 
+2. 指令按照从上到下，顺序执行
+3. "#" 表示注释 
+4. 每条指令都会创建一个新的镜像层，并对镜像进行提交 
+
+**流程:**
+
+1. docker从基础镜像运行一个容器
+2. 执行一条指令并对容器做出修改
+3. 执行类似 docker commit 的操作提交一个新的镜像层 
+4. Docker再基于刚提交的镜像运行一个新容器 
+5. 执行dockerfile中的下一条指令直到所有指令都执行完成!
+
+**说明:**
+
+从应用软件的角度来看，DockerFile，docker镜像与docker容器分别代表软件的三个不同阶段。
+
++ DockerFile 是软件的原材料 (代码)
++ Docker 镜像则是软件的交付品 (.apk)
++ Docker 容器则是软件的运行状态 (客户下载安装执行)
+
+DockerFile 面向开发，Docker镜像成为交付标准，Docker容器则涉及部署与运维，三者缺一不可!
+
+### **DockerFile指令**
+
+**关键字:**
+
+```shell
+FROM # 基础镜像，当前新镜像是基于哪个镜像的 MAINTAINER # 镜像维护者的姓名混合邮箱地址
+RUN # 容器构建时需要运行的命令
+EXPOSE # 当前容器对外保留出的端口
+WORKDIR # 指定在创建容器后，终端默认登录的进来工作目录，一个落脚点
+ENV # 用来在构建镜像过程中设置环境变量
+ADD # 将宿主机目录下的文件拷贝进镜像且ADD命令会自动处理URL和解压tar压缩包 
+COPY # 类似ADD，拷贝文件和目录到镜像中!
+VOLUME # 容器数据卷，用于数据保存和持久化工作
+CMD # 指定一个容器启动时要运行的命令，dockerFile中可以有多个CMD指令，但只有最 后一个生效!
+ENTRYPOINT # 指定一个容器启动时要运行的命令!和CMD一样 会有一点点区别
+ONBUILD # 当构建一个被继承的DockerFile时运行命令，父镜像在被子镜像继承后，父镜像的 ONBUILD被触发
+```
+
+### **实战测试**
+
+> 自定义一个centos
+
+**1、编写DockerFile**
+
+**我们拉去官方的centos 进入容器会发现 vim 和 ifconfig 指令都用不了，不方便**
+
++ 准备编写DockerFlie文件
+
+```shell
+[root@wl home]# mkdir dockerfile-test
+[root@wl home]# vim mydockerfile-centos # 编辑文件 
+[root@wl home]# cat mydockerfile-centos
+FROM centos
+MAINTAINER wl<24736743@qq.com>
+ENV MYPATH /usr/local
+WORKDIR $MYPATH
+RUN yum -y install vim
+RUN yum -y install net-tools
+EXPOSE 80
+CMD echo $MYPATH
+CMD echo "----------end--------"
+CMD /bin/bash
+```
+
+**2、构建**
+
+`docker build -f dockerfile地址 -t 新镜像名字:TAG .`
+
+```shell
+# 查看本地机器上是否有刚构建的镜像
+docker images
+```
+
+**3、运行**
+
+`docker run -it 新镜像名字:TAG`
+
+可以发现，我们自己的新镜像已经支持 vim/ifconfig的命令，扩展OK!
+
+**4、列出镜像地的变更历史**
+
+`docker history 镜像名`
 
 
-## **发布镜像**
 
+> CMD 和 ENTRYPOINT 的区别
 
+我们之前说过，两个命令都是指定一个容器启动时要运行的命令
+
+**CMD:**Dockerfile 中可以有多个CMD 指令，但只有最后一个生效，CMD 会被 docker run 之后的参数 替换!
+
+**ENTRYPOINT:** docker run 之后的参数会被当做参数传递给 ENTRYPOINT，之后形成新的命令组合! 
+
+> 自定义镜像 tomcat，直接看DockerFile文件的编写吧
+
+```shell
+# vim Dockerfile
+FROM centos
+MAINTAINER wl<24736743@qq.com> 
+#把宿主机当前上下文的read.txt拷贝到容器/usr/local/路径下
+COPY read.txt /usr/local/cincontainer.txt
+#把java与tomcat添加到容器中
+ADD jdk-8u11-linux-x64.tar.gz /usr/local/
+ADD apache-tomcat-9.0.22.tar.gz /usr/local/
+#安装vim编辑器
+RUN yum -y install vim
+#设置工作访问时候的WORKDIR路径，登录落脚点
+ENV MYPATH /usr/local
+WORKDIR $MYPATH
+#配置java与tomcat环境变量
+ENV JAVA_HOME /usr/local/jdk1.8.0_11
+ENV CLASSPATH $JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+ENV CATALINA_HOME /usr/local/apache-tomcat-9.0.22
+ENV CATALINA_BASE /usr/local/apache-tomcat-9.0.22
+ENV PATH $PATH:$JAVA_HOME/bin:$CATALINA_HOME/lib:$CATALINA_HOME/bin #容器运行时监听的端口
+EXPOSE 8080
+#启动时运行tomcat 三选一
+# ENTRYPOINT ["/usr/local/apache-tomcat-9.0.22/bin/startup.sh" ]
+# CMD ["/usr/local/apache-tomcat-9.0.22/bin/catalina.sh","run"] 
+# CMD /usr/local/apache-tomcat-9.0.22/bin/startup.sh && tail -F /usr/local/apache-tomcat-9.0.22/bin/logs/catalina.out
+```
+
+### **总结**
+
+> 至此，我认为我们应该算是Docker 简单入门了！！！！！
 
 ## **Docker网络讲解**
 
+### **理解Docker0**
 
+```shell
+# 准备工作:清空所有的容器，清空所有的镜像
+
+docker rm -f $(docker ps -a -q) # 删除所有容器 
+docker rmi -f $(docker images -qa) # 删除全部镜像
+```
+
+> 我们先来做个测试
+
+查看本地ip `ip addr`  **注意看docker0**
+
+```shell
+lo 127.0.0.1 # 本机回环地址 
+eth0 172.17.90.138 # 私有IP 
+docker0 172.18.0.1 # docker网桥
+# 问题:Docker 是如何处理容器网络访问的?
+```
+
+我们思考这样一个问题，开发了很多微服务项目，那些微服务项目都要连接数据库，需要指定数据库的url地 址，通过ip。但是我们用Docker管理的话，假设数据库出问题了，我们重新启动运行一个，这个时候数 据库的地址就会发生变化，docker会给每个容器都分配一个ip，且容器和容器之间是可以互相访问的。 我们可以测试下容器之间能不能ping通过:
+
+```shell
+# 启动tomcat01
+[root@wl ~]# docker run -d -P --name tomcat01 tomcat
+
+# 查看tomcat01的ip地址，docker会给每个容器都分配一个ip!
+[root@wl ~]# docker exec -it tomcat01 ip addr
+
+# 思考，我们的linux服务器是否可以ping通容器内的tomcat ?
+[root@kuangshen ~]# ping 172.18.0.2
+# 可以ping 通
+```
+
+> 思考，问什么可以ping通呢？
+
+1、每一个安装了Docker的linux主机都有一个docker0的虚拟网卡。这是个桥接网卡，使用了veth-pair 技术!
+
+```shell
+# 我们再次查看主机的 ip addr
+[root@wl ~]# ip addr
+
+docker0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state
+UP group default
+    link/ether 02:42:bb:71:07:06 brd ff:ff:ff:ff:ff:ff
+    inet 172.18.0.1/16 brd 172.18.255.255 scope global docker0
+valid_lft forever preferred_lft forever
+
+123: vethc8584ea@if122: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc
+noqueue master docker0 state UP group default
+link/ether 0a:4b:bb:40:78:a7 brd ff:ff:ff:ff:ff:ff link-netnsid 0 
+# 发现:本来我们有三个网络，我们在启动了个tomcat容器之后，多了一个!123的网络!
+```
+
+2、每启动一个容器，linux主机就会多了一个虚拟网卡。
+
+```shell
+# 我们启动了一个tomcat01，主机的ip地址多了一个   123: vethc8584ea@if122 
+# 然后我们在tomcat01容器中查看容器的ip是        122: eth0@if123
+# 我们再启动一个tomcat02观察
+[root@wl ~]# docker run -d -P --name tomcat02 tomcat
+# 然后发现linux主机上又多了一个网卡 125: veth021eeea@if124: 
+
+[root@wl ~]# docker exec -it tomcat02 ip addr
+# 我们看下tomcat02的容器内ip地址是 124: eth0@if125: 
+
+
+# 观察现象:
+# tomcat --- linux主机 vethc8584ea@if122 ---- 容器内 eth0@if123 
+# tomcat --- linux主机 veth021eeea@if124 ---- 容器内 eth0@if125 
+# 相信到了这里，大家应该能看出点小猫腻了吧!只要启动一个容器，就有一对网卡
+# veth-pair 就是一对的虚拟设备接口，它都是成对出现的。一端连着协议栈，一端彼此相连着。
+# 正因为有这个特性，它常常充当着一个桥梁，连接着各种虚拟网络设备!
+# “Bridge、OVS 之间的连接”，“Docker 容器之间的连接” 等等，以此构建出非常复杂的虚拟网络 结构，比如 OpenStack Neutron。
+```
+
+3、我们来测试下tomcat01和tomcat02容器间是否可以互相ping通
+
+```shell
+[root@wl ~]# docker exec -it tomcat02 ping 172.18.0.2
+PING 172.18.0.2 (172.18.0.2) 56(84) bytes of data.
+64 bytes from 172.18.0.2: icmp_seq=1 ttl=64 time=0.110 ms
+# 结论:容器和容器之间是可以互相访问的。
+```
+
+4、我们来画一个网络模型图
+
+{% asset_img 9.png Docker结构图  %}
+
+**结论:**
+
+tomcat1和tomcat2共用一个路由器。是的，他们使用的一个，就是docker0。任何一个容器启动 默认都是docker0网络。
+docker默认会给容器分配一个可用ip。
+
+### **--Link**
+
+思考一个场景，我们编写一个微服务，数据库连接地址原来是使用ip的，如果ip变化就不行了，那我们 能不能使用服务名访问呢?
+
+jdbc:mysql://mysql:3306，这样的话哪怕mysql重启，我们也不需要修改配置了!
+
+`docker提供了 --link 的操作!`
+
+```shell
+# 我们使用tomcat02，直接通过容器名ping tomcat01，不使用ip 
+[root@wl ~]# docker exec -it tomcat02 ping tomcat01 
+ping: tomcat01: Name or service not known 
+# 发现ping不通
+
+# 我们再启动一个tomcat03，但是启动的时候连接tomcat02
+[root@wl ~]# docker run -d -P --name tomcat03 --link tomcat02 tomcat
+
+# 这个时候，我们就可以使用tomcat03 ping通tomcat02 了
+[root@wl ~]# docker exec -it tomcat03 ping tomcat02
+PING tomcat02 (172.18.0.3) 56(84) bytes of data.
+64 bytes from tomcat02 (172.18.0.3): icmp_seq=1 ttl=64 time=0.093 ms 64 bytes from tomcat02 (172.18.0.3): icmp_seq=2 ttl=64 time=0.066 ms
+
+# 再来测试，tomcat03 是否可以ping tomcat01 失败 
+[root@wl ~]# docker exec -it tomcat03 ping tomcat01 
+ping: tomcat01: Name or service not known
+
+# 再来测试，tomcat02 是否可以ping tomcat03 反向也ping不通 
+[root@wl ~]# docker exec -it tomcat02 ping tomcat03 
+ping: tomcat03: Name or service not known
+```
+
+思考，这个原理是什么呢?我们进入tomcat03中查看下host配置文件
+
+```shell
+[root@wl ~]# docker exec -it tomcat03 cat /etc/hosts
+127.0.0.1   localhost
+::1 localhost ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+172.18.0.3 tomcat02 b80da266a3ad # 发现tomcat2直接被写在这里 172.18.0.4 a3a4a17a2b70
+# 所以这里其实就是配置了一个 hosts 地址而已!
+# 原因:--link的时候，直接把需要link的主机的域名和ip直接配置到了hosts文件中了。
+```
+
+`--link早都过时了，我们不推荐使用!我们可以使用自定义网络的方式`
+
+### **自定义网络**
+
+```shell
+# 命令查看
+docker network --help
+
+# 列出所有网络
+docker network ls
+
+# 查看一个具体的网络的详细信息
+# 命令
+[root@wl ~]# docker network inspect 4eb2182ac4b2
+```
+
+> 自定义网卡
+
+1. 我们来创建容器，但是我们知道默认创建的容器都是docker0网卡的
+
+```shell
+# 默认我们不配置网络，也就相当于默认值 --net bridge 使用的docker0 
+docker run -d -P --name tomcat01 --net bridge tomcat
+
+# docker0网络的特点 
+1.它是默认的
+2.域名访问不通
+3.--link 域名通了，但是删了又不行
+```
+
+2. 我们可以让容器创建的时候使用自定义网络
+
+```shell
+# 查看如何创建网络
+docker network create --help
+
+# 自定义创建的默认default "bridge"
+# 自定义创建一个网络网络
+[root@wl ~]# docker network create --driver bridge --subnet 192.168.0.0/16 --gateway 192.168.0.1 mynet
+
+# 确认下
+[root@wl ~]# docker network ls
+
+[root@wl ~]# docker network inspect mynet
+
+# 我们来启动两个容器测试，使用自己的 mynet!
+[root@wl ~]# docker run -d -P --name tomcat-net-01 --net mynet tomcat
+[root@wl ~]# docker run -d -P --name tomcat-net-02 --net mynet tomcat
+
+# 我们来测试ping容器名和ip试试，都可以ping通
+[root@wl ~]# docker exec -it tomcat-net-01 ping 192.168.0.3
+[root@wl ~]# docker exec -it tomcat-net-01 ping tomcat-net-02
+
+# 发现，我们自定义的网络docker都已经帮我们维护好了对应的关系
+# 所以我们平时都可以这样使用网络，不使用--link效果一样，所有东西实时维护好，直接域名 ping 通。
+```
+
+> 思考：上述其实就相当于两个容器同属于一个局域网，当然可以连通了，但是现在有两个不同的网络，这样该怎么相互连通呢？
+
+docker0和自定义网络肯定不通，我们使用自定义网络的好处就是网络隔离:
+
+大家公司项目部署的业务都非常多，假设我们有一个商城，我们会有订单业务(操作不同数据)，会有 订单业务购物车业务(操作不同缓存)。如果在一个网络下，有的程序猿的恶意代码就不能防止了，所 以我们就在部署的时候网络隔离，创建两个桥接网卡，比如订单业务(里面的数据库，redis，mq，全 部业务 都在order-net网络下)其他业务在其他网络。
+
+那关键的问题来了，如何让 tomcat-net-01 访问 tomcat1?
+
+```shell
+# 启动默认的容器，在docker0网络下
+[root@wl ~]# docker run -d -P --name tomcat01 tomcat
+[root@wl ~]# docker run -d -P --name tomcat02 tomcat
+
+# 我们来查看下network帮助，发现一个命令 connect 
+[root@wl ~]# docker network --help
+
+# 我们来测试一下!打通mynet-docker0
+# 命令 docker network connect [OPTIONS] NETWORK CONTAINER
+
+[root@wl ~]# docker network connect mynet tomcat01
+[root@wl ~]# docker network inspect mynet
+
+# tomcat01 可以ping通了
+[root@wl ~]# docker exec -it tomcat01 ping tomcat-net-01
+
+# tomcat02 依旧ping不通，大家应该就理解了
+[root@wl ~]# docker exec -it tomcat02 ping tomcat-net-01
+ping: tomcat-net-01: Name or service not known
+```
+
+**结论**
+
+> 如果要跨网络操作别人，就需要使用
+>
+> `docker network connect [OPTIONS] NETWOEK CONTAINER`
 
 ## **实战:部署一个Redis集群**
