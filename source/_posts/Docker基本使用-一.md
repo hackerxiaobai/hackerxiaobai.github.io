@@ -1138,3 +1138,74 @@ ping: tomcat-net-01: Name or service not known
 > `docker network connect [OPTIONS] NETWOEK CONTAINER`
 
 ## **实战:部署一个Redis集群**
+
+### 集群简单设计图
+
+{% asset_img 10.png Docker结构图  %}
+
+```shell
+# 创建网卡
+docker network create redis --subnet 172.38.0.0/16
+
+# 通过脚本创建六个redis配置
+for port in $(seq 1 6); \
+do \
+mkdir -p /mydata/redis/node-${port}/conf
+touch /mydata/redis/node-${port}/conf/redis.conf
+cat << EOF >/mydata/redis/node-${port}/conf/redis.conf port 6379
+bind 0.0.0.0
+cluster-enabled yes
+cluster-config-file nodes.conf
+cluster-node-timeout 5000
+cluster-announce-ip 172.38.0.1${port}
+cluster-announce-port 6379
+cluster-announce-bus-port 16379
+appendonly yes
+EOF
+done
+
+docker run -p 637${port}:6379 -p 1637${port}:16379 --name redis-${port} \
+-v /mydata/redis/node-${port}/data:/data \
+-v /mydata/redis/node-${port}/conf/redis.conf:/etc/redis/redis.conf \
+-d --net redis --ip 172.38.0.1${port} redis:5.0.9-alpine3.11 redis-server
+/etc/redis/redis.conf; \
+
+
+# 启动6个容器
+docker run -p 6371:6379 -p 16371:16379 --name redis-1 \
+-v /mydata/redis/node-1/data:/data \
+-v /mydata/redis/node-1/conf/redis.conf:/etc/redis/redis.conf \
+-d --net redis --ip 172.38.0.11 redis:5.0.9-alpine3.11 redis-server /etc/redis/redis.conf
+
+...
+
+docker run -p 6376:6379 -p 16376:16379 --name redis-6 \
+-v /mydata/redis/node-6/data:/data \
+-v /mydata/redis/node-6/conf/redis.conf:/etc/redis/redis.conf \
+-d --net redis --ip 172.38.0.16 redis:5.0.9-alpine3.11 redis-server
+/etc/redis/redis.conf
+
+# 进入一个redis，注意这里是 sh命令 
+docker exec -it redis-1 /bin/sh
+# 创建集群
+redis-cli --cluster create 172.38.0.11:6379 172.38.0.12:6379 172.38.0.13:6379 172.38.0.14:6379 172.38.0.15:6379 172.38.0.16:6379 -- cluster-replicas 1
+# 连接集群 
+redis-cli -c
+# 查看集群信息 
+cluster info
+# 查看节点 
+cluster nodes
+
+# set a b
+# 停止到存值的容器
+# 然后再次get a，发现依旧可以获取值 # 查看节点，发现高可用完全没问题
+
+```
+
+## 最后
+
+> 到这里对于不是专门干运维的同学，应该够用了
+
+### 思考
+
+我们可以发现上面这些东西好像都还是单机上的一些容器处理，如果是一个服务器集群的话，该如何来管理这些容器了，或者一台机器上多个容器，如何来编排他们的依赖关系呢？这就是下一篇博客要解释的`docker-compose`和`docker-swap`
