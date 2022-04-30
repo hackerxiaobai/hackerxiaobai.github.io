@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2022-04-30T11:56:18.023Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.88 Safari/537.36" etag="jqFHzF_SCIM9O_9rReLF" version="17.5.0" type="github" pages="2">
+<mxfile host="app.diagrams.net" modified="2022-04-30T11:59:09.652Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.88 Safari/537.36" etag="BjSCPfmxQCZ13prLVict" version="17.5.0" type="github" pages="2">
   <diagram id="17pct5bd-_R6_cm7R62k" name="Page-1">
-    <mxGraphModel dx="1018" dy="659" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" background="none" math="0" shadow="0">
+    <mxGraphModel dx="1018" dy="602" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" background="none" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -56,68 +56,68 @@
     </mxGraphModel>
   </diagram>
   <diagram id="3ZJ99M01-rlFQCI2QktX" name="Page-2">
-    <mxGraphModel dx="1757" dy="1203" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1370" dy="1028" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1169" pageHeight="1654" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="4m6WefljovSOOzzvM4tm-5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="4m6WefljovSOOzzvM4tm-13">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="333" y="-31" as="sourcePoint" />
-            <mxPoint x="163" y="426" as="targetPoint" />
+            <mxPoint x="150" y="-188" as="sourcePoint" />
+            <mxPoint x="-20" y="269" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="4m6WefljovSOOzzvM4tm-1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="165" y="68" as="targetPoint" />
+            <mxPoint x="-18" y="-89" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-1" value="实时音频信号数据" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="105" y="-38" width="120" height="60" as="geometry" />
+          <mxGeometry x="-78" y="-195" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-26" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="4m6WefljovSOOzzvM4tm-2">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="159" y="540" as="targetPoint" />
+            <mxPoint x="-24" y="383" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-2" value="采用wav2vec预训练模型获取上述音频特征信号" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="99" y="428" width="120" height="60" as="geometry" />
+          <mxGeometry x="-84" y="271" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-18" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="4m6WefljovSOOzzvM4tm-4" target="4m6WefljovSOOzzvM4tm-17">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-4" value="CNN卷积神经网络对音频特征信号进行模型判定" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="103" y="543" width="120" height="60" as="geometry" />
+          <mxGeometry x="-80" y="386" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="4m6WefljovSOOzzvM4tm-6">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="163" y="178" as="targetPoint" />
+            <mxPoint x="-20" y="21" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-6" value="采用音频声学知识对上述音频信号进行第一次过滤" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="103" y="70" width="120" height="60" as="geometry" />
+          <mxGeometry x="-80" y="-87" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="4m6WefljovSOOzzvM4tm-8" target="4m6WefljovSOOzzvM4tm-10">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-14" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="4m6WefljovSOOzzvM4tm-8">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="163" y="314" as="targetPoint" />
+            <mxPoint x="-20" y="157" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-8" value="是否有声音信号" style="rhombus;whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="123" y="180" width="80" height="80" as="geometry" />
+          <mxGeometry x="-60" y="23" width="80" height="80" as="geometry" />
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-10" value="仍然处于未接通状态，重新获取音频信号数据，接着判定" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="-95" y="190" width="120" height="60" as="geometry" />
+          <mxGeometry x="-278" y="33" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-12" value="无声音信号" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
-          <mxGeometry x="45" y="229" width="70" height="18" as="geometry" />
+          <mxGeometry x="-138" y="72" width="70" height="18" as="geometry" />
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-13" value="对声音信号进行如下判定" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="103" y="316" width="120" height="60" as="geometry" />
+          <mxGeometry x="-80" y="159" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-15" value="有声音信号" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
-          <mxGeometry x="164" y="270" width="70" height="18" as="geometry" />
+          <mxGeometry x="-19" y="113" width="70" height="18" as="geometry" />
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-20" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="4m6WefljovSOOzzvM4tm-17" target="4m6WefljovSOOzzvM4tm-19">
           <mxGeometry relative="1" as="geometry" />
@@ -126,35 +126,35 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-17" value="是否接通第一次判定" style="rhombus;whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="123" y="665" width="80" height="80" as="geometry" />
+          <mxGeometry x="-60" y="508" width="80" height="80" as="geometry" />
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-19" value="未接通状态进一步判定" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="-57" y="675" width="120" height="60" as="geometry" />
+          <mxGeometry x="-240" y="518" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-21" value="未接通" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
-          <mxGeometry x="69" y="684" width="46" height="18" as="geometry" />
+          <mxGeometry x="-114" y="527" width="46" height="18" as="geometry" />
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-22" value="已接通状态进一步判定" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
-          <mxGeometry x="263" y="675" width="120" height="60" as="geometry" />
+          <mxGeometry x="80" y="518" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-24" value="已接通" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
-          <mxGeometry x="203" y="684" width="46" height="18" as="geometry" />
+          <mxGeometry x="20" y="527" width="46" height="18" as="geometry" />
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-31" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;" edge="1" parent="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="238" y="800" as="sourcePoint" />
-            <mxPoint x="330" y="735" as="targetPoint" />
+            <mxPoint x="55" y="643" as="sourcePoint" />
+            <mxPoint x="147" y="578" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="330" y="800" />
+              <mxPoint x="147" y="643" />
             </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-32" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="4m6WefljovSOOzzvM4tm-19">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
-            <mxPoint x="211" y="742" as="sourcePoint" />
-            <mxPoint x="100" y="804" as="targetPoint" />
+            <mxPoint x="28" y="585" as="sourcePoint" />
+            <mxPoint x="-83" y="647" as="targetPoint" />
             <Array as="points">
-              <mxPoint x="3" y="804" />
+              <mxPoint x="-180" y="647" />
             </Array>
           </mxGeometry>
         </mxCell>
@@ -162,13 +162,13 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-33" value="采用Yamnet模型获取上述音频信号特征，取top100特征" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="108" y="775" width="120" height="60" as="geometry" />
+          <mxGeometry x="-75" y="618" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-37" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="4m6WefljovSOOzzvM4tm-34" target="4m6WefljovSOOzzvM4tm-36">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-34" value="top100特征加上CNN模型预测的是否接通特征共同输入到lightgbm模型，进行二次判定" style="whiteSpace=wrap;html=1;rounded=1;" vertex="1" parent="1">
-          <mxGeometry x="108" y="915" width="121" height="77" as="geometry" />
+          <mxGeometry x="-75" y="758" width="121" height="77" as="geometry" />
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-39" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="4m6WefljovSOOzzvM4tm-36" target="4m6WefljovSOOzzvM4tm-38">
           <mxGeometry relative="1" as="geometry" />
@@ -177,19 +177,19 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-36" value="是否接通" style="rhombus;whiteSpace=wrap;html=1;rounded=1;" vertex="1" parent="1">
-          <mxGeometry x="128.5" y="1070.5" width="80" height="80" as="geometry" />
+          <mxGeometry x="-54.5" y="913.5" width="80" height="80" as="geometry" />
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-38" value="仍然处于未接通状态，接着继续上述流程处理" style="whiteSpace=wrap;html=1;rounded=1;" vertex="1" parent="1">
-          <mxGeometry x="-51.5" y="1081.5" width="120" height="60" as="geometry" />
+          <mxGeometry x="-234.5" y="924.5" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-40" value="未接通" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
-          <mxGeometry x="80" y="1087" width="46" height="18" as="geometry" />
+          <mxGeometry x="-103" y="930" width="46" height="18" as="geometry" />
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-42" value="已接通，通知外呼机器人" style="whiteSpace=wrap;html=1;rounded=1;" vertex="1" parent="1">
-          <mxGeometry x="268.5" y="1080.5" width="120" height="60" as="geometry" />
+          <mxGeometry x="85.5" y="923.5" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="4m6WefljovSOOzzvM4tm-44" value="已接通" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
-          <mxGeometry x="207" y="1087" width="46" height="18" as="geometry" />
+          <mxGeometry x="24" y="930" width="46" height="18" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
